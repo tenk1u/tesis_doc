@@ -1,0 +1,802 @@
+\documentclass[12pt,oneside]{report}
+
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[a4paper,top=3cm,bottom=3cm,left=3.5cm,right=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\usepackage{csquotes}
+\usepackage{hyperref}
+\usepackage{tocbibind}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  urlcolor=black,
+  pdftitle={Título de la tesis},
+  pdfauthor={Nombre del autor}
+}
+
+\onehalfspacing
+\setlength{\parindent}{1.25cm}
+\setlength{\parskip}{0.5\baselineskip}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\begin{titlepage}
+  \centering
+  {\Large \textbf{Universidad Nacional Mayor de San Marcos}}\\[0.4cm]
+  {\large Universidad del Perú, Decana de América}\\[0.4cm]
+  {\large Facultad de \textit{Nombre de la facultad}}\\[0.2cm]
+  {\large Escuela Profesional de \textit{Nombre de la escuela}}\\[1.8cm]
+
+  % Si tienes el escudo de la universidad, guárdalo en el proyecto y reemplaza la línea siguiente.
+  % \includegraphics[width=0.25\textwidth]{escudo-unmsm.png}\\[1.5cm]
+
+  {\Large \textbf{Título de la tesis}}\\[1.5cm]
+
+  {\large Tesis para optar el título profesional de \textit{Nombre del título profesional}}\\[1.2cm]
+
+  {\large \textbf{Autor}}\\[0.2cm]
+  {\large Tomasto Solis, Victor Eduardo}\\[0.2cm]
+  {\large Gonzales Villalobos, Jhon}\\[0.8cm]
+
+  {\large \textbf{Asesor}}\\[0.2cm]
+  {\large Canepa Perez, Carlos Alberto}\\[1.5cm]
+
+  {\large Lima, Perú}\\[0.2cm]
+  {\large 2026}
+\end{titlepage}
+
+\clearpage
+\pagenumbering{roman}
+
+\chapter*{Dedicatoria}
+\addcontentsline{toc}{chapter}{Dedicatoria}
+Escribe aquí una dedicatoria breve y personal.
+
+\chapter*{Agradecimientos}
+\addcontentsline{toc}{chapter}{Agradecimientos}
+Escribe aquí los agradecimientos a personas, instituciones, laboratorios, proyectos o fuentes de financiamiento que apoyaron el desarrollo de la investigación.
+
+\chapter*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen}
+El resumen debe presentar de forma concisa el problema de investigación, el objetivo general, la metodología, los principales resultados y las conclusiones. Se recomienda redactarlo en un solo bloque, con lenguaje claro y académico.
+
+\textbf{Palabras clave:} 3D Gaussian Splatting; reconstrucción tridimensional; autoconstrucción; evaluación estructural; inspección digital.
+
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+The abstract should briefly state the research problem, general objective, methodology, main findings, and conclusions.
+
+\textbf{Keywords:} 3D Gaussian Splatting; three-dimensional reconstruction; self-built housing; structural assessment; digital inspection.
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\clearpage
+\pagenumbering{arabic}
+
+\chapter{Introducción}
+
+\section{Antecedentes}
+El acceso a una vivienda segura y adecuada continúa siendo uno de los principales desafíos urbanos en América Latina, particularmente en países como el Perú, donde el crecimiento acelerado de las ciudades ha superado la capacidad del Estado y del mercado formal para atender la demanda habitacional. Ante esta limitación estructural, millones de familias recurren a soluciones por cuenta propia para edificar sus viviendas, levantando estructuras de manera progresiva y muchas veces sin asistencia técnica especializada. Este fenómeno, extendido en las periferias urbanas desde hace varias décadas, ha configurado gran parte del tejido urbano actual y constituye tanto una estrategia de supervivencia como una fuente significativa de riesgos estructurales y de habitabilidad. Es en este contexto donde cobra relevancia la comprensión del proceso de autoconstrucción y sus implicancias para la seguridad y resiliencia de las viviendas en el país.\par
+
+La autoconstrucción se define como la autogestión del hábitat de manera informal; es un concepto asociado a la forma de edificar en zonas periurbanas que comprende procesos como el diseño, la autogestión de materiales y recursos, la utilización de métodos de autoayuda y la construcción progresiva ajustada a la capacidad económica del hogar (Castro \& Perdomo, 2024). Esta forma de edificación supone un riesgo tanto para quienes la practican como para su entorno, pues al prescindir de la asesoría profesional y de la supervisión técnica adecuada, las construcciones suelen presentar deficiencias estructurales que incrementan su vulnerabilidad frente a eventos naturales. El Perú, por su condición geográfica y su ubicación en el Cinturón de Fuego del Pacífico, está expuesto a una alta sismicidad y a fenómenos climatológicos como inundaciones y huaycos, entre otros; estas condiciones agravan aún más los riesgos de colapso de edificaciones autoconstruidas y evidencian la necesidad de promover viviendas seguras y técnicamente planificadas. \par
+
+En países del Sur Global, como los ubicados en Latinoamérica, África y Asia, la autoconstrucción informal surge como respuesta al déficit habitacional, la pobreza urbana y la burocracia estatal. En contraste, en el Norte Global la autoconstrucción puede desarrollarse de manera planificada, con apoyo de cooperativas, marcos regulatorios o programas específicos, como ocurre con experiencias de \textit{self-build housing} en países como Reino Unido o Alemania (Murillo, 2012). En ese sentido, la construcción surge como una solución al hábitat y presenta variaciones incluso dentro de un mismo país o comunidad, como se muestra en la Figura~\ref{fig:factores-autoconstruccion}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figuras/figura1.1.jpg}
+  \caption{Combinación de factores sobre la autoconstrucción.}
+  \label{fig:factores-autoconstruccion}
+  \vspace{0.2cm}
+
+  \small \textit{Fuente:} Extraído de Murillo (2012).
+\end{figure} 
+
+En América Latina y el Caribe, según el Reporte de Economía y Desarrollo 2017 de CAF (RED 2017), si los hogares latinoamericanos destinaran el 30\% de sus ingresos al consumo de servicios habitacionales, necesitarían más de 30 años de ahorro para adquirir una vivienda de 60~m$^2$ de precio mediano. En ese contexto, la proliferación de asentamientos precarios en la región constituye una expresión extrema de las limitaciones del mercado de vivienda para responder a este déficit. \par
+
+En Chile, Malatesta (2007) propuso un modelo de comunicación informático aplicado a la producción social del hábitat, con el fin de fortalecer los procesos de autoconstrucción mediante la teleformación de los usuarios. La propuesta se basó en un sistema de ayuda informatizada orientado a transmitir conocimientos técnicos de manera asincrónica a los autoconstructores, validado mediante la usabilidad y pertinencia temática del portal desarrollado. Esta investigación demostró la persistencia de la autoconstrucción en sectores populares y la necesidad de incorporar herramientas tecnológicas que respeten las dinámicas sociales del hábitat popular. Sin embargo, su enfoque se centró principalmente en la educación y capacitación, dejando abierta la posibilidad de explorar soluciones basadas en diagnóstico automatizado y modelado digital, como las que propone la presente investigación. \par
+
+En Brasil, la autoconstrucción constituye una práctica extendida entre los sectores de bajos ingresos, vinculada a la falta de acceso a servicios técnicos especializados. Según Luz da Conceição (2023), la ausencia de asistencia técnica en este tipo de edificaciones ha favorecido la proliferación de asentamientos precarios sin condiciones adecuadas de habitabilidad. En respuesta a esta problemática, se han impulsado iniciativas estatales orientadas a reducir la distancia entre el conocimiento técnico y las prácticas empíricas de construcción, como la Asistencia Técnica para la Vivienda de Interés Social (ATHIS). Sin embargo, pese a los avances obtenidos, los resultados muestran que la cobertura sigue siendo limitada frente a la magnitud del déficit habitacional y la informalidad constructiva existente.\par
+
+En Colombia, se han implementado esfuerzos orientados a mejorar la gestión técnica y administrativa en los procesos de acceso a vivienda formal. Ardila Itriago (2018) documenta una experiencia desarrollada en la Caja de Compensación CAJASAN, donde la asistencia técnica y administrativa en visitas de vivienda nueva, usada o en mejoramiento permitió incrementar la cantidad de subsidios aprobados. Este resultado se logró mediante una comunicación más eficiente y una entrega detallada de información a los solicitantes, lo que evidencia la relevancia de los mecanismos de acompañamiento técnico en la reducción de errores y la formalización del proceso constructivo.\par
+
+En el Perú, la autoconstrucción representa una modalidad preponderante de acceso a la vivienda. De acuerdo con un estudio realizado por GRADE para ADI Perú, aproximadamente el 71\% de las viviendas ubicadas en zonas urbanas del país han sido levantadas bajo esquemas de autoconstrucción o edificación progresiva (GRADE, 2023). Esto se manifiesta con mayor intensidad en ciudades intermedias y periferias de Lima Metropolitana, donde las oportunidades de vivienda formal son limitadas. Esta elevada incidencia indica claramente que la autoconstrucción no solo es una alternativa habitacional, sino también un fenómeno estructural del mercado de vivienda peruano, con implicancias directas en la seguridad, la planificación urbana y la gestión de riesgos estructurales, como se muestra en la Figura~\ref{fig:viviendas-autoconstruidas}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figuras/figura1.2.jpg}
+  \caption{Número de viviendas autoconstruidas.}
+  \label{fig:viviendas-autoconstruidas}
+  \vspace{0.2cm}
+
+  \small \textit{Fuente:} GRADE (2023).
+\end{figure}
+
+En el Perú, el Ministerio de Vivienda, Construcción y Saneamiento advierte sobre la gravedad del proceso informal mediante el cual se han construido numerosas viviendas en nuevos distritos y asentamientos humanos. Estas edificaciones suelen levantarse sin conocimientos técnicos suficientes y con materiales inapropiados para el tipo de vivienda, lo que incrementa su vulnerabilidad frente a desastres naturales. Según datos del INEI, solo el 16\% de las viviendas informales contó con licencia de construcción y apenas el 14\% fue construida con asistencia de un ingeniero civil o arquitecto. En su defecto, la mayoría de estas viviendas recurre a maestros de obra, quienes representan una alternativa menos costosa, pero no siempre cuentan con los conocimientos técnicos necesarios para garantizar estructuras seguras y resistentes, como se muestra en la Figura~\ref{fig:calidad-estructural-viviendas-informales}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figuras/figura1.3.jpg}
+  \caption{Indicadores de calidad estructural de las viviendas informales en Lima.}
+  \label{fig:calidad-estructural-viviendas-informales}
+  \vspace{0.2cm}
+
+  \small \textit{Nota:} Se consideran vulnerables las viviendas con pisos de materiales distintos al cemento, madera, losetas, terrazos o láminas; paredes de materiales distintos al ladrillo o piedra unida con cal o cemento; y techos de materiales no adecuados para la seguridad estructural.
+
+  \small \textit{Fuente:} INEI (2024), Indicadores de calidad estructural de las viviendas informales en Lima.
+\end{figure}
+
+Chumpitaz Martínez (2023) propone un programa municipal de asistencia técnica orientado a la construcción progresiva de viviendas autoconstruidas en Lima Metropolitana. La investigación combina un enfoque documental y de campo para caracterizar las tipologías de vivienda autoconstruida y definir modalidades de asistencia técnica adecuadas a cada contexto. El estudio plantea la creación del Programa Municipal para la Construcción Asistida de Viviendas Progresivas y Autoconstruidas (PCA) y desarrolla un proyecto piloto en el sector La Flor, Carabayllo, que busca articular el trabajo entre el gobierno local y la ciudadanía mediante un modelo de cogobernanza habitacional. Entre sus conclusiones, el autor destaca la necesidad de complementar la focalización poblacional con la focalización territorial, integrando criterios de habitabilidad, entorno urbano y organización social, como base para políticas sostenibles de vivienda social asistida.\par
+
+Flores Laurente y Urure Rojas (2024) desarrollaron un plan de asistencia técnica para reducir la vulnerabilidad estructural en viviendas autoconstruidas de dos pisos en el distrito de Ciudad Nueva, Tacna. La investigación se basó en observación directa, encuestas y análisis documental, aplicadas a 28 pobladores y 5 viviendas autoconstruidas, lo que permitió identificar las principales deficiencias en diseño y construcción. Los resultados evidenciaron que el 39,2\% de los encuestados no contó con asesoría profesional durante las etapas de diseño arquitectónico, estructural, sanitario o eléctrico, y un porcentaje similar tampoco recibió orientación técnica durante la ejecución de la obra. Asimismo, se reportó que más del 78\% de las viviendas presentaban deterioro en columnas y cerca del 21\% en vigas y muros. Estas deficiencias estructurales aumentan el riesgo de colapso ante un evento sísmico, destacando la necesidad de implementar estrategias de acompañamiento técnico y programas de asistencia preventiva que garanticen la seguridad de las familias y la sostenibilidad de las edificaciones autoconstruidas en el país.\par
+
+En el contexto de la informalidad constructiva, la verificación estructural de viviendas autoconstruidas en el Perú depende casi exclusivamente de inspecciones presenciales realizadas por ingenieros municipales o consultores privados. Este proceso, además de ser costoso y poco accesible para familias de bajos recursos, presenta limitaciones operativas importantes: la cobertura técnica es reducida y la mayoría de distritos no cuenta con personal especializado o herramientas digitales que permitan evaluar de forma rápida la seguridad estructural de una vivienda existente. Según SENCICO (2023), más del 60\% de las viviendas autoconstruidas del país no han pasado por una revisión técnica formal, lo que incrementa su vulnerabilidad frente a sismos o fallas de cimentación.\par
+
+Frente a ello, en los últimos años se ha extendido el uso de técnicas de análisis no destructivo (NDT, por sus siglas en inglés) que permiten estimar la calidad y estabilidad de las edificaciones sin necesidad de intervenir físicamente en la estructura. Entre las más comunes se encuentran la termografía infrarroja, el escaneo láser 3D, el ultrasonido de concreto y la fotogrametría digital (Gao et al., 2023). Estas herramientas ofrecen ventajas al proporcionar modelos tridimensionales del inmueble y detectar deformaciones o irregularidades geométricas. Sin embargo, su aplicación en el contexto peruano sigue siendo limitada por el alto costo del equipamiento, la complejidad del procesamiento de datos y la falta de personal técnico capacitado para interpretar los resultados (Flores \& Urure, 2024).\par
+
+En este escenario emerge el potencial de las técnicas de reconstrucción 3D basadas en inteligencia artificial, particularmente el método conocido como 3D Gaussian Splatting (3DGS). Esta tecnología, derivada de los avances en neural rendering y Neural Radiance Fields (NeRF), permite reconstruir escenas tridimensionales a partir de fotografías o videos comunes, con alta fidelidad visual y en tiempo real (Kerbl et al., 2023). A diferencia de los métodos tradicionales de fotogrametría, 3DGS no requiere calibraciones complejas ni cámaras profesionales; puede funcionar con imágenes obtenidas por un teléfono móvil, lo que reduce significativamente los costos de adquisición y tiempo de procesamiento. Estudios recientes muestran su eficacia en ámbitos como reconstrucción arquitectónica, ingeniería civil y agricultura de precisión, con métricas de precisión superiores al 90\% en la detección de errores geométricos (Li et al., 2024).\par
+
+Pese a sus ventajas, el principal desafío actual radica en interpretar automáticamente los modelos 3D generados para detectar deficiencias estructurales. En este punto, la incorporación de modelos de aprendizaje profundo (Deep Learning) permite analizar la geometría y textura de las superficies reconstruidas para predecir posibles errores en la distribución de cargas, fisuras o deformaciones estructurales. Estos modelos han demostrado su capacidad para reconocer patrones complejos a partir de datos espaciales tridimensionales, constituyéndose en una herramienta valiosa para la automatización de la inspección técnica (Zhang et al., 2024).\par
+
+De esta manera, la presente investigación propone el desarrollo de un prototipo basado en 3D Gaussian Splatting y modelos de inteligencia artificial capaz de generar un modelo tridimensional de una vivienda a partir de fotografías y analizarlo automáticamente para identificar riesgos estructurales derivados de la autoconstrucción. El sistema buscará ofrecer una alternativa digital accesible para ingenieros municipales, fiscalizadores y ciudadanos, que facilite una evaluación preliminar no destructiva de las edificaciones, promoviendo la construcción segura y la toma de decisiones informadas. En un país de alta sismicidad como el Perú, donde más del 70\% de las viviendas son autoconstruidas, la aplicación de tecnologías emergentes como la reconstrucción 3D neuronal y la IA representa una oportunidad concreta para reducir la vulnerabilidad urbana y democratizar el acceso a la asistencia técnica constructiva.\par
+
+
+\section{Definición del problema}
+Presenta la situación problemática, la brecha tecnológica o metodológica identificada y su impacto en el ámbito de estudio.
+
+\subsection{Problema general}
+La carencia de herramientas digitales accesibles y automatizadas que permitan evaluar la calidad estructural de las viviendas autoconstruidas en el Perú incrementa la vulnerabilidad del parque habitacional y limita la capacidad de supervisión técnica municipal
+
+\subsection{Problemas específicos}
+\begin{enumerate}
+  \item La alta tasa de informalidad en los procesos de autoconstrucción en el Perú incrementa el riesgo de colapso ante eventos sísmicos o climáticos.
+  \item No existen sistemas tecnológicos que integren el procesamiento de imágenes y videos para reconstruir digitalmente viviendas autoconstruidas y evaluar sus características geométricas o estructurales.
+  \item La evaluación estructural sigue dependiendo del criterio subjetivo de inspectores o ingenieros, sin apoyo de modelos automatizados de inteligencia artificial que permitan identificar de forma estandarizada errores o deficiencias constructivas.
+\end{enumerate}
+
+\section{Objetivos}
+
+\subsection{Objetivo general}
+Reducir el riesgo e incremento de la seguridad habitacional, mediante el desarrollo e implementación de una solución tecnológica basado en reconstrucción 3D y modelos de  inteligencia artificial en el Perú
+
+\subsection{Objetivos específicos}
+\begin{enumerate}
+  \item Identificar los principales factores técnicos asociados a la vulnerabilidad estructural.
+  \item Implementar un algoritmo capaz de generar modelos tridimensionales a partir de fotografías, videos o escaneos LiDAR de viviendas autoconstruidas, optimizando su precisión geométrica.
+  \item Entrenamiento de los modelos de inteligencia artificial basados en los modelos 3D obtenidos  que detectan deficiencias estructurales o constructivas.
+\end{enumerate}
+
+\section{Justificación}
+En el Perú, la autoconstrucción representa una práctica extendida y culturalmente arraigada, especialmente en zonas urbanas y periurbanas donde el acceso a la vivienda formal es limitado. Sin embargo, esta modalidad de edificación suele realizarse sin asesoría técnica profesional, lo que genera viviendas vulnerables ante eventos sísmicos, deslizamientos o lluvias intensas. Según el Ministerio de Vivienda, Construcción y Saneamiento (MVCS 2023), más del 70\% del parque habitacional peruano ha sido construido de manera informal, y cerca del 60\% presenta algún tipo de deficiencia estructural.\par
+
+Frente a esta realidad, el fortalecimiento de los mecanismos de evaluación técnica resulta esencial para reducir la vulnerabilidad estructural de millones de viviendas. No obstante, la supervisión presencial por parte de ingenieros o fiscalizadores resulta limitada debido a la escasez de personal técnico, la dispersión geográfica y los costos asociados. En este contexto, la incorporación de herramientas digitales y modelos de inteligencia artificial se presenta como una alternativa viable y sostenible para apoyar los procesos de inspección y diagnóstico estructural.\par
+
+La computación gráfica y las técnicas de reconstrucción 3D, como el 3D Gaussian Splatting (3DGS), permiten generar modelos tridimensionales de edificaciones a partir de imágenes o vídeos, con alta fidelidad geométrica y bajo costo. Integrar estas técnicas con sistemas de inteligencia artificial posibilita automatizar la detección de errores constructivos y evaluar de manera remota la seguridad de las viviendas autoconstruidas.\par
+
+Este estudio busca contribuir al desarrollo de un sistema digital que combine reconstrucción 3D y aprendizaje automático para mejorar la gestión técnica de la autoconstrucción, aportando así a la seguridad habitacional y a la reducción del riesgo estructural en el país. Además, constituye una base metodológica para futuras investigaciones en el campo de la ingeniería civil asistida por inteligencia artificial y la modernización de los mecanismos de fiscalización urbana.\par
+
+\section{Importancia}
+La autoconstrucción constituye uno de los principales mecanismos de acceso a la vivienda en el Perú, pero también una de las causas más críticas de vulnerabilidad estructural. Según el Ministerio de Vivienda, Construcción y Saneamiento (MVCS, 2023), más del 70\% de las viviendas en el país se levantan sin asistencia técnica profesional, lo que incrementa significativamente el riesgo de colapso durante eventos sísmicos o climáticos.\par
+
+Contar con un sistema digital capaz de analizar de forma automatizada las condiciones estructurales de viviendas autoconstruidas —a partir de modelos tridimensionales generados por imágenes o videos— permitiría reducir el margen de error humano, mejorar la fiscalización técnica y optimizar el proceso de detección temprana de deficiencias constructivas.\par
+
+La implementación de herramientas de reconstrucción 3D e inteligencia artificial no solo representa un aporte tecnológico al campo de la ingeniería civil, sino que también constituye una estrategia de inclusión social al facilitar el acceso a evaluaciones técnicas precisas, incluso en zonas donde no se dispone de especialistas. En este sentido, la investigación busca contribuir al fortalecimiento de la seguridad habitacional, la sostenibilidad urbana y la modernización de la gestión pública en materia de vivienda.\par
+
+\section{Limitaciones}
+
+\subsection{Limitación espacial}
+El estudio se enfocará en viviendas sociales de autoconstrucción en zonas urbanas y periurbanas del Perú, priorizando el distrito de Lima Carabayllo Metropolitana con alta vulnerabilidad estructural.
+
+\subsection{Limitación social}
+El prototipo estará orientado principalmente a fiscalizadores municipales, maestros de obra y estudiantes de ingeniería civil, quienes podrán utilizarlo como herramienta de verificación rápida y apoyo en la supervisión de edificaciones.
+
+\subsection{Limitación técnica}
+Se utilizará 3D Gaussian Splatting para la reconstrucción tridimensional en tiempo real.
+
+\section{Organización de la tesis}
+La presente tesis está estructurada en seis capítulos:\par
+
+Capítulo I: Planteamiento metodológico
+Describe los antecedentes, formulación del problema, objetivos, justificación, alcance, hipótesis, variables y la organización general del trabajo.\par
+
+Capítulo II: Estado del Arte
+Presenta la revisión sistemática de literatura sobre análisis no destructivos en edificaciones, evolución de técnicas de reconstrucción 3D (fotogrametría, NeRF y 3DGS), así como aplicaciones relacionadas en ingeniería civil y arquitectura.\par
+
+Capítulo III: Marco Teórico
+Define los conceptos fundamentales asociados al problema (autoconstrucción, predimensionamiento estructural, RNE) y a la solución propuesta (computación gráfica neuronal, 3DGS, métricas de calidad visual y precisión geométrica).\par
+
+Capítulo IV: Metodología de investigación
+Detalla el tipo y diseño de la investigación, población y muestra, técnicas de recolección de datos, construcción del dataset, implementación del prototipo, y métodos de validación técnica y subjetiva.\par
+
+Capítulo V: Diseño y desarrollo de la solución
+Expone el proceso de construcción del prototipo: herramientas utilizadas, dataset, preprocesamiento, reconstrucción con 3DGS, conversión a malla, sistema de análisis y generación de informes.\par
+
+Capítulo VI: Resultados y análisis
+Presenta los resultados obtenidos en las pruebas experimentales: precisión de medidas, rendimiento técnico, percepción de usuarios y comparación con técnicas tradicionales.\par
+
+Capítulo VII: Discusión, conclusiones y recomendaciones
+Discute los hallazgos, valida las hipótesis, expone las limitaciones y formula recomendaciones para futuros trabajos.\par
+
+\chapter{Estado del arte}
+
+\section{Metodología de la investigación}
+La metodología de este estudio se desarrolló mediante una revisión sistemática de la literatura (RSL) basada en el enfoque propuesto por Kitchenham y Charters (2007), el cual estructura el proceso en tres etapas principales: planificación, desarrollo y resultados.\par
+
+Planificación: En esta etapa se formularon preguntas de investigación orientadas a identificar las técnicas y enfoques más relevantes de reconstrucción tridimensional (3D) aplicadas a la ingeniería civil, arquitectura y análisis estructural. Se buscó determinar los algoritmos, frameworks y modelos de aprendizaje profundo más utilizados, así como los datasets y métricas de evaluación empleados en la literatura reciente. Además, se seleccionaron los repositorios académicos, se definieron las cadenas de búsqueda y se establecieron los criterios de inclusión y exclusión de los artículos analizados.\par
+
+Desarrollo: En esta etapa se ejecutó la búsqueda sistemática en los repositorios seleccionados, aplicando los criterios de elegibilidad definidos. Los artículos fueron revisados y clasificados de acuerdo con su relevancia temática, año de publicación y aporte metodológico. Posteriormente, se organizó la información de manera estructurada para dar respuesta a las preguntas de investigación planteadas.\par
+
+Resultados: Finalmente, se elaboró una síntesis crítica y comparativa de la información recopilada, destacando los principales avances y limitaciones de las técnicas de reconstrucción 3D, con especial atención a la evolución desde la fotogrametría tradicional y NeRF hasta la implementación de 3D Gaussian Splatting (3DGS) y su potencial aplicación en la fiscalización técnica de edificaciones y análisis no destructivo.\par
+
+
+\section{Planificación de la revisión}
+
+\subsection{Preguntas de investigación}
+Se llevó a cabo una revisión bibliográfica exhaustiva con el objetivo de recopilar información actualizada sobre las técnicas y métodos empleados en la reconstrucción tridimensional de escenas y edificaciones mediante inteligencia artificial y renderizado neuronal.\par
+
+En primer lugar, se formularon preguntas específicas destinadas a comprender el estado actual de las tecnologías aplicadas a la reconstrucción 3D, su evolución hacia modelos basados en 3D Gaussian Splatting (3DGS) y su potencial aplicación en el análisis no destructivo de estructuras civiles.\par
+
+Cada pregunta se centra en un aspecto técnico o metodológico clave de las soluciones basadas en IA y visión por computadora, y sus respuestas son fundamentales para definir el alcance de la presente investigación.\par
+
+Se plantearon las siguientes preguntas de investigación:\par
+
+Q1: ¿Cuáles son las técnicas o métodos actuales de reconstrucción 3D empleados en ingeniería civil y arquitectura?\par
+
+Q2: ¿Qué ventajas y limitaciones presenta 3D Gaussian Splatting frente a otros enfoques como Neural Radiance Fields (NeRF) y la fotogrametría tradicional?\par
+
+Q3: ¿Qué datasets o fuentes de datos se utilizan comúnmente para el entrenamiento y validación de modelos de reconstrucción tridimensional?\par
+
+Q4: ¿Cuáles son las métricas más relevantes para evaluar la calidad visual y geométrica de las reconstrucciones tridimensionales?\par
+
+Q5: ¿Qué aplicaciones concretas del 3DGS existen en el ámbito de la ingeniería civil, arquitectura o fiscalización técnica de edificaciones?\par
+
+\subsection{Repositorio y proceso de búsqueda}
+Para seleccionar los repositorios académicos, se consideraron aspectos como la cobertura temática y la especialización en áreas de ingeniería civil, visión por computadora y computación gráfica, así como la calidad y accesibilidad de las publicaciones indexadas.\par
+
+Los repositorios elegidos fueron Scopus, IEEE Xplore, ScienceDirect, SpringerLink y ACM Digital Library, por su relevancia en la difusión de investigaciones relacionadas con la reconstrucción tridimensional, el renderizado neuronal y la aplicación de inteligencia artificial en ingeniería.\par
+
+Antes de iniciar la búsqueda, se diseñaron cadenas de consulta específicas para cada repositorio, utilizando combinaciones de palabras clave tales como “3D Gaussian Splatting”, “Neural Radiance Fields”, “3D reconstruction”, “photogrammetry”, “non-destructive evaluation”, “structural inspection”, “LiDAR”, “civil engineering” y “architecture”.\par
+
+\subsection{Criterios de elegibilidad}
+Se priorizaron artículos publicados en los últimos cinco años (2020–2025) con el propósito de identificar los avances más recientes en técnicas de reconstrucción tridimensional (3D) y renderizado neuronal aplicadas a la ingeniería civil, arquitectura y análisis estructural.\par
+
+Los criterios definidos permitieron asegurar la relevancia técnica y científica de los trabajos seleccionados, garantizando que los estudios analizados contribuyan de manera significativa al entendimiento y evolución de métodos como 3D Gaussian Splatting (3DGS), Neural Radiance Fields (NeRF) y la fotogrametría avanzada en contextos reales de inspección estructural.\par
+
+
+\begin{table}[htbp]
+  \centering
+  \caption{Criterios de inclusión y exclusión de estudios}
+  \label{tab:criterios-inclusion-exclusion}
+  \small
+  \begin{tabular}{p{0.45\textwidth} p{0.45\textwidth}}
+    \toprule
+    \textbf{Criterios de inclusión} & \textbf{Criterios de exclusión} \\
+    \midrule
+    \begin{itemize}
+      \setlength\itemsep{0.2em}
+      \item Artículos publicados entre 2020 y 2025.
+      \item Estudios orientados a la reconstrucción tridimensional o al análisis visual de estructuras o escenas reales.
+      \item Trabajos que describen o implementan técnicas basadas en aprendizaje profundo, visión por computadora o renderizado neuronal, como NeRF, 3DGS u otros enfoques relacionados.
+      \item Investigaciones que responden a una o más de las preguntas de investigación planteadas.
+      \item Estudios que incluyen métricas objetivas de rendimiento o calidad visual, tales como PSNR, SSIM, LPIPS, FPS u otras métricas comparables.
+    \end{itemize}
+    &
+    \begin{itemize}
+      \setlength\itemsep{0.2em}
+      \item Documentos que sean libros, tesis o reportes sin revisión por pares.
+      \item Publicaciones cuyo idioma no sea inglés o español.
+      \item Revisiones teóricas sin experimentación o validación práctica.
+      \item Trabajos enfocados exclusivamente en el ámbito del entretenimiento o videojuegos.
+      \item Estudios que no disponen de acceso al texto completo.
+    \end{itemize} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Desarrollo de la revisión}
+Una vez seleccionados los repositorios académicos (Scopus, IEEE Xplore, ScienceDirect y ACM Digital Library), se emplearon las palabras clave y cadenas de búsqueda previamente definidas, tales como “3D Gaussian Splatting”, “Neural Radiance Fields”, “3D reconstruction”, “photogrammetry”, “structural analysis”, “civil engineering” y “architectural heritage”.\par
+
+Esta búsqueda inicial dio como resultado 432 artículos potencialmente elegibles. Luego se procedió a aplicar los criterios de exclusión, reduciendo el conjunto a 158 artículos. Posteriormente, se analizaron los resúmenes, conclusiones y secciones experimentales, aplicando los criterios de inclusión definidos en la Tabla 2.2, lo que permitió seleccionar 82 artículos con contenido relevante.\par
+
+Finalmente, tras una revisión completa de los documentos restantes, se identificaron 40 artículos científicos directamente relacionados con los objetivos de esta investigación, los cuales abordan técnicas de reconstrucción 3D, renderizado neuronal y su aplicación en contextos de ingeniería civil y arquitectura.\par
+
+\section{Resultado de la búsqueda}
+
+\begin{landscape}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.03\linewidth} >{\raggedright\arraybackslash}p{0.27\linewidth} >{\centering\arraybackslash}p{0.05\linewidth} >{\raggedright\arraybackslash}p{0.08\linewidth} >{\raggedright\arraybackslash}p{0.14\linewidth} >{\raggedright\arraybackslash}p{0.15\linewidth} >{\raggedright\arraybackslash}p{0.13\linewidth}}
+\caption{Artículos seleccionados para la revisión sistemática}\label{tab:articulos-seleccionados}\\
+\toprule
+\textbf{N} & \textbf{Título del paper} & \textbf{Año} & \textbf{Fuente} & \textbf{Área de aplicación} & \textbf{Técnica usada} & \textbf{Métricas reportadas} \\
+\midrule
+\endfirsthead
+\caption[]{Artículos seleccionados para la revisión sistemática (continuación)}\\
+\toprule
+\textbf{N} & \textbf{Título del paper} & \textbf{Año} & \textbf{Fuente} & \textbf{Área de aplicación} & \textbf{Técnica usada} & \textbf{Métricas reportadas} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{7}{r}{\small Continúa en la siguiente página}\\
+\endfoot
+\bottomrule
+\endlastfoot
+    1 & LiDAR-3DGS: LiDAR reinforcement for multimodal initialization of 3D Gaussian Splats & 2024 & ScienceDirect & Topografía, GIS & 3DGS + LiDAR & SSIM/PSNR, tiempo \\
+    2 & Integrating 3DGS novel view synthesis and CFD for modeling bionic robotic fish from multi view imagery & 2024 & ScienceDirect & Robótica, simulación de fluidos & 3DGS + CFD & Error relativo \\
+    3 & High-fidelity 3D reconstruction of peach orchards using a 3DGS-Ag model & 2023 & ScienceDirect & Agricultura de precisión & 3DGS & SSIM, reconstrucción \\
+    4 & Biomass phenotyping of oilseed rape through UAV multi-view oblique imaging with 3DGS and SAM model & 2024 & ScienceDirect & Agricultura (fenotipado) & 3DGS + UAV & Volumen, error geométrico \\
+    5 & A 3DGS and LLM-based physical-to-virtual approach for human-robot interactive manufacturing & 2024 & ScienceDirect & Industria 4.0 & 3DGS + LLM & FPS, precisión \\
+    6 & From comparison to integration: A workflow evaluation of 3D Gaussian splatting and LiDAR point cloud for modern architectural heritage & 2023 & ScienceDirect & Arquitectura, patrimonio & 3DGS + LiDAR & Comparación tiempo/calidad \\
+    7 & 3DGStrands: Personalized 3D Gaussian splatting for realistic hair representation and animation & 2024 & ScienceDirect & Animación, videojuegos & 3DGS & SSIM, FPS \\
+    8 & EGU-GS: Efficient Gaussian utilization for real-time 3D Gaussian splatting & 2024 & ScienceDirect & Computación gráfica (optimización) & 3DGS optimizado & FPS, memoria \\
+    9 & Highly stretchable and conductive 3D graphene skeleton/polyacrylamide/LiCl nanocomposite hydrogels for high-performance electromagnetic interference shielding & 2023 & ScienceDirect & Materiales & 3D graphene skeleton & N/A \\
+    10 & SHREC GS-3DORC: Towards the advancements of 3D Gaussian Splatting object part retrieval & 2023 & ScienceDirect & Visión por computadora (dataset retrieval) & 3DGS & Accuracy retrieval \\
+    11 & Regularized three-dimensional Gaussians for large-scale building reconstruction with spatial prior & 2024 & ScienceDirect & Arquitectura / civil & 3DGS & Error geométrico, SSIM \\
+    12 & A review of recent advances in 3D Gaussian Splatting for optimization and reconstruction & 2024 & ScienceDirect & Revisión general & 3DGS & FPS \\
+    13 & Cotton3DGaussians: Multiview 3D Gaussian Splatting for boll mapping and plant architecture analysis & 2023 & ScienceDirect & Agricultura & 3DGS & Volumen, error \\
+    14 & FastTalker: Real-time audio-driven talking face generation with 3D Gaussian & 2024 & ScienceDirect & IA / animación & 3DGS & FPS, calidad visual \\
+    15 & FeatureGS: Eigenvalue-feature optimization in 3D Gaussian Splatting for geometrically accurate and artifact-reduced reconstruction & 2024 & ScienceDirect & Computación gráfica & 3DGS & Error geométrico, SSIM \\
+    16 & Novel UAV-based 3D reconstruction using dense LiDAR point cloud and imagery: A geometry-aware 3D gaussian splatting approach & 2024 & ScienceDirect & Ingeniería civil, topografía & 3DGS + LiDAR & Error relativo, SSIM \\
+    17 & P3DFusion: A cross-scene and high-fidelity 3D plant reconstruction framework empowered by vision foundation models and 3D Gaussian splatting & 2024 & ScienceDirect & Agricultura & 3DGS + foundation models & SSIM, PSNR \\
+    18 & LFGS: A lightweight framework for efficient 3D Gaussian Splatting with minimal memory footprint & 2024 & ScienceDirect & Computación gráfica & 3DGS & FPS, memoria \\
+    19 & PcdGS: A point cloud densification method for Gaussian Splatting & 2024 & ScienceDirect & Visión 3D & 3DGS & Densidad, error geométrico \\
+    20 & A Neural Rendering system for fashion design process & 2024 & ScienceDirect & Moda / diseño & 3DGS & Calidad visual \\
+    21 & USGS: Enhancing sparse view synthesis with unseen viewpoint regularization in 3D Gaussian splatting & 2024 & ScienceDirect & Computación gráfica & 3DGS & SSIM, LPIPS \\
+    22 & ESA-GS: Elongation splitting and assimilation in Gaussian splatting for accurate surface reconstruction & 2025 & ScienceDirect & Computación gráfica / superficies & 3DGS con elongation splitting & SSIM, error geométrico \\
+    23 & SREGS: Sparse-view Gaussian radiance fields with geometric regularization and region exploration & 2025 & ScienceDirect & Reconstrucción con pocas vistas & 3DGS con regularización geométrica & PSNR, SSIM \\
+    24 & High-fidelity 3D Gaussian inpainting: Preserving multi-view consistency and photorealistic details & 2025 & ScienceDirect & Reconstrucción + completado de huecos & 3DGS + inpainting multi-view & SSIM, LPIPS \\
+    25 & SuraGS: Toward efficient few-shot novel view synthesis via surface-aware Gaussian splatting & 2025 & ScienceDirect & Reconstrucción eficiente & 3DGS + awareness de superficie & SSIM, FPS \\
+    26 & UV Gaussians: Joint learning of mesh deformation and Gaussian textures for human avatar modeling & 2025 & ScienceDirect & Animación / modelado humano & 3DGS + malla UV & Calidad de texturas, FPS \\
+    27 & DualPhys-GS: Dual physically-guided 3D Gaussian splatting for underwater scene reconstruction & 2025 & ScienceDirect & Medio acuático / visión submarina & 3DGS + guías físicas & SSIM, error de reconstrucción \\
+    28 & StruGS: Structurally consistent 3D Gaussian Splatting with targeted optimization strategies & 2025 & ScienceDirect & Ingeniería / arquitectura & 3DGS + optimización estructural & Error geométrico, PSNR \\
+    29 & IPENS: Interactive Unsupervised Framework for Rapid Plant Phenotyping Extraction via NeRF-SAM2 Fusion & 2025 & ScienceDirect & Agricultura, plantas & NeRF + SAM2 + visión & Accuracy fenotípica \\
+    30 & Multi-view optimization and refinement for high-fidelity 4D Gaussian splatting & 2025 & ScienceDirect & Escenas dinámicas (tiempo) & 4DGS & SSIM, temporal coherence \\
+    31 & 4DStyleGaussian: Generalizable 4D Style Transfer with Gaussian Splatting & 2025 & ScienceDirect & Arte / estilo visual & 4DGS + style transfer & Calidad subjetiva \\
+    32 & Simulated Skewed Gaussian Splatting: A New Approach to Geometric Primitives & 2025 & Scopus & Visualización 3D, reconstrucción & 3D Gaussian Splatting & Calidad visual, error geométrico \\
+    33 & PFGS: Pose-Fused 3D Gaussian Splatting for Complete Multi-Pose Object Reconstruction & 2025 & Scopus & Reconstrucción 3D, visión por computadora & 3D Gaussian Splatting + multi-pose fusion & Fidelidad de reconstrucción, cobertura de pose \\
+    34 & SG-Splatting: Accelerating 3D Gaussian Splatting with Spherical Gaussians & 2025 & Scopus & Visualización 3D, renderizado en tiempo real & 3D Gaussian Splatting + Spherical Gaussians & Tiempo de render, calidad visual \\
+    35 & 3D Gaussian Splatting: Techniques and Applications in Architecture & 2025 & Scopus & Arquitectura, diseño visual & 3D Gaussian Splatting & Detalle visual, eficiencia \\
+    36 & Practical application of Gaussian Splatting with new geometric primitives for modeling constructions & 2025 & Scopus & Ingeniería estructural, reconstrucción & 3D Gaussian Splatting & Precisión estructural, fidelidad \\
+    37 & Evaluation of buildings generated with 3D Gaussian Splatting & 2024 & Scopus & Visualización 3D, modelado & 3D Gaussian Splatting & Calidad visual, comparación temporal \\
+    38 & Gaussian Splatting Add-on en Evergine para visualización 3D & 2025 & Scopus & Visualización arquitectónica y productiva & 3D Gaussian Splatting + integración software & Interactividad, detalle visual \\
+    39 & 3D Gaussian splatting technologies and extensions: A review & 2025 & ScienceDirect & Visión por computadora, renderizado 3D & 3D Gaussian Splatting y extensiones & Calidad visual, fidelidad, velocidad de render \\
+    40 & A novel framework utilizing 3D Gaussian Splatting to reconstruct sparse points from drone images & 2025 & ScienceDirect & Topografía, reconstrucción con drones & 3D Gaussian Splatting + fotogrametría & Precisión geométrica, densidad de puntos \\
+\end{longtable}
+\normalsize
+\end{landscape}
+
+\section{Análisis}
+
+\subsection{Q1: ¿Qué enfoques existen para la reconstrucción tridimensional de escenas y edificaciones?}
+\begin{table}[htbp]
+  \centering
+  \caption{Estudios principales considerados para el análisis comparativo}
+  \label{tab:estudios-analisis-comparativo}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\centering\arraybackslash}p{0.045\textwidth} >{\raggedright\arraybackslash}p{0.32\textwidth} >{\centering\arraybackslash}p{0.06\textwidth} >{\raggedright\arraybackslash}p{0.105\textwidth} >{\raggedright\arraybackslash}p{0.16\textwidth} >{\raggedright\arraybackslash}p{0.145\textwidth}}
+    \toprule
+    \textbf{N.\textsuperscript{o}} & \textbf{Título} & \textbf{Año} & \textbf{Fuente} & \textbf{Técnica} & \textbf{Métricas} \\
+    \midrule
+    01 & LiDAR-3DGS: LiDAR reinforcement for multimodal initialization of 3D Gaussian Splats & 2024 & Science\-Direct & 3DGS + LiDAR & SSIM/PSNR, tiempo \\
+    02 & Biomass phenotyping of oilseed rape through UAV multi-view oblique imaging with 3DGS and SAM model & 2024 & Science\-Direct & 3DGS + UAV & Volumen, error geométrico \\
+    03 & FeatureGS: Eigenvalue-feature optimization in 3D Gaussian Splatting for geometrically accurate and artifact-reduced reconstruction & 2024 & Science\-Direct & 3DGS & Error geométrico, SSIM \\
+    04 & P3DFusion: A cross-scene and high-fidelity 3D plant reconstruction framework empowered by vision foundation models and 3D Gaussian splatting & 2024 & Science\-Direct & 3DGS + foundation models & SSIM, PSNR \\
+    05 & PcdGS: A point cloud densification method for Gaussian Splatting & 2025 & Science\-Direct & Visión 3D & Densidad, error geométrico \\
+    06 & UV Gaussians: Joint learning of mesh deformation and Gaussian textures for human avatar modeling & 2025 & Science\-Direct & 3DGS + malla UV & Calidad de texturas, FPS \\
+    07 & Practical application of Gaussian Splatting with new geometric primitives for modeling constructions & 2025 & Scopus & 3D Gaussian Splatting & Precisión estructural, fidelidad \\
+    08 & 3D Gaussian splatting technologies and extensions: A review & 2025 & Science\-Direct & 3D Gaussian Splatting y extensiones & Calidad visual, fidelidad, velocidad de render \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum\par
+
+\subsection{Q2: ¿Qué ventajas y limitaciones presenta 3D Gaussian Splatting frente a otros enfoques como Neural Radiance Fields (NeRF) y la fotogrametría tradicional?}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Ventajas y limitaciones identificadas en estudios sobre 3D Gaussian Splatting}
+  \label{tab:ventajas-limitaciones-3dgs}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\centering\arraybackslash}p{0.05\textwidth} >{\raggedright\arraybackslash}p{0.43\textwidth} >{\centering\arraybackslash}p{0.07\textwidth} >{\raggedright\arraybackslash}p{0.13\textwidth} >{\raggedright\arraybackslash}p{0.24\textwidth}}
+    \toprule
+    \textbf{N.\textsuperscript{o}} & \textbf{Título} & \textbf{Año} & \textbf{Fuente} & \textbf{Ventaja o limitación} \\
+    \midrule
+    01 & 3D Gaussian splatting technologies and extensions: A review & 2025 & Science\-Direct & Mejor rendimiento en tiempo real. \\
+    02 & High-fidelity 3D reconstruction of peach orchards using a 3DGS-Ag model & 2023 & Science\-Direct & Se realiza un entrenamiento rápido. \\
+    03 & SHREC GS-3DORC: Towards the advancements of 3D Gaussian Splatting object part retrieval & 2023 & Science\-Direct & Consume una gran cantidad de memoria. \\
+    04 & A review of recent advances in 3D Gaussian Splatting for optimization and reconstruction & 2024 & Science\-Direct & No garantiza consistencia multi-vista. \\
+    05 & Novel UAV-based 3D reconstruction using dense LiDAR point cloud and imagery: A geometry-aware 3D gaussian splatting approach & 2024 & Science\-Direct & Presenta una calidad fotorrealista superior. \\
+    06 & SREGS: Sparse-view Gaussian radiance fields with geometric regularization and region exploration & 2025 & Science\-Direct & Se hace lento debido a la elaborada optimización de parámetros. \\
+    07 & StruGS: Structurally consistent 3D Gaussian Splatting with targeted optimization strategies & 2025 & Scopus & Permite fácil edición explícita. \\
+    08 & Gaussian Splatting Add-on en Evergine para visualización 3D & 2025 & Science\-Direct & Fácil integración con pipelines de renderizado. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum\par
+
+\subsection{Q3: ¿Qué datasets o fuentes de datos se utilizan comúnmente para el entrenamiento y validación de modelos de reconstrucción tridimensional?}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Datasets y fuentes de datos reportados en estudios seleccionados}
+  \label{tab:datasets-fuentes-datos}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\centering\arraybackslash}p{0.045\textwidth} >{\raggedright\arraybackslash}p{0.36\textwidth} >{\centering\arraybackslash}p{0.065\textwidth} >{\raggedright\arraybackslash}p{0.11\textwidth} >{\raggedright\arraybackslash}p{0.09\textwidth} >{\raggedright\arraybackslash}p{0.18\textwidth}}
+    \toprule
+    \textbf{N.\textsuperscript{o}} & \textbf{Título} & \textbf{Año} & \textbf{Fuente} & \textbf{País} & \textbf{Dataset} \\
+    \midrule
+    01 & Integrating 3DGS novel view synthesis and CFD for modeling bionic robotic fish from multi view imagery & 2025 & Science\-Direct & Dina\-marca & DTU (Technical University of Denmark) \\
+    02 & A 3DGS and LLM-based physical-to-virtual approach for human-robot interactive manufacturing & 2023 & Science\-Direct & Reino Unido & LLFF (Local Light Field Fusion) \\
+    03 & Highly stretchable and conductive 3D graphene skeleton/polyacrylamide/LiCl nanocomposite hydrogels for high-performance electromagnetic interference shielding & 2024 & Science\-Direct & EE. UU. & CO3D (Common Objects in 3D) \\
+    04 & LFGS: A lightweight framework for efficient 3D Gaussian Splatting with minimal memory footprint & 2024 & Science\-Direct & EE. UU. & MSR-Object3D \\
+    05 & USGS: Enhancing sparse view synthesis with unseen viewpoint regularization in 3D Gaussian splatting & 2024 & Science\-Direct & China & NSRW (NeuS Synthetic Radiance World) \\
+    06 & ESA-GS: Elongation splitting and assimilation in Gaussian splatting for accurate surface reconstruction & 2025 & Science\-Direct & China & MVS-Synthetic (parte de BlendedMVS o similar) \\
+    07 & IPENS: Interactive Unsupervised Framework for Rapid Plant Phenotyping Extraction via NeRF-SAM2 Fusion & 2025 & Science\-Direct & EE. UU. & LLFF (Local Light Field Fusion) \\
+    08 & PFGS: Pose-Fused 3D Gaussian Splatting for Complete Multi-Pose Object Reconstruction & 2025 & Science\-Direct & EE. UU. & CO3D (Common Objects in 3D) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum\par
+
+\subsection{Q4: ¿Cuáles son las métricas más relevantes para evaluar la calidad visual y geométrica de las reconstrucciones tridimensionales?}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Métricas reportadas para evaluar reconstrucciones tridimensionales}
+  \label{tab:metricas-reconstruccion-3d}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\centering\arraybackslash}p{0.04\textwidth} >{\raggedright\arraybackslash}p{0.30\textwidth} >{\centering\arraybackslash}p{0.06\textwidth} >{\raggedright\arraybackslash}p{0.10\textwidth} >{\raggedright\arraybackslash}p{0.17\textwidth} >{\raggedright\arraybackslash}p{0.15\textwidth}}
+    \toprule
+    \textbf{N.\textsuperscript{o}} & \textbf{Título} & \textbf{Año} & \textbf{Fuente} & \textbf{Técnica} & \textbf{Métricas} \\
+    \midrule
+    01 & From comparison to integration: A workflow evaluation of 3D Gaussian splatting and LiDAR point cloud for modern architectural heritage & 2023 & Science\-Direct & 3DGS + LiDAR & Comparación tiempo/calidad \\
+    02 & EGU-GS: Efficient Gaussian utilization for real-time 3D Gaussian splatting & 2024 & Science\-Direct & 3DGS optimizado & FPS, memoria \\
+    03 & Cotton3DGaussians: Multiview 3D Gaussian Splatting for boll mapping and plant architecture analysis & 2023 & Science\-Direct & 3DGS & Volumen, \% de error \\
+    04 & A Neural Rendering system for fashion design process Gaussian & 2024 & Science\-Direct & 3DGS & Visual quality \\
+    05 & High-fidelity 3D Gaussian inpainting: Preserving multi-view consistency and photorealistic details & 2025 & Science\-Direct & 3DGS + inpainting multi-view & SSIM, LPIPS \\
+    06 & 4DStyleGaussian: Generalizable 4D Style Transfer with Gaussian Splatting & 2025 & Science\-Direct & 4DGS + style transfer & Calidad subjetiva \\
+    07 & SG-Splatting: Accelerating 3D Gaussian Splatting with Spherical Gaussians & 2025 & Scopus & 3D Gaussian Splatting + Spherical Gaussians & Tiempo de render, calidad visual \\
+    08 & Gaussian Splatting Add-on en Evergine para visualización 3D & 2025 & Scopus & 3D Gaussian Splatting + integración software & Interactividad, detalle visual \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum\par
+
+\subsection{Q5: ¿Qué aplicaciones concretas del 3DGS existen en el ámbito de la ingeniería civil, arquitectura o fiscalización técnica de edificaciones?}
+
+\begin{table}[htbp]
+  \centering
+  \caption{Aplicaciones potenciales de 3D Gaussian Splatting en edificaciones}
+  \label{tab:aplicaciones-3dgs-edificaciones}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\centering\arraybackslash}p{0.045\textwidth} >{\raggedright\arraybackslash}p{0.36\textwidth} >{\centering\arraybackslash}p{0.065\textwidth} >{\raggedright\arraybackslash}p{0.11\textwidth} >{\raggedright\arraybackslash}p{0.32\textwidth}}
+    \toprule
+    \textbf{N.\textsuperscript{o}} & \textbf{Título} & \textbf{Año} & \textbf{Fuente} & \textbf{Aplicación en edificación} \\
+    \midrule
+    01 & 3DGStrands: Personalized 3D Gaussian splatting for realistic hair representation and animation & 2024 & Science\-Direct & Inspección visual rápida de estructuras dentro de una representación tridimensional. \\
+    02 & Regularized three-dimensional Gaussians for large-scale building reconstruction with spatial prior & 2024 & Science\-Direct & Documentación fotorrealista del progreso de obra mediante técnicas visuales. \\
+    03 & FastTalker: Real-time audio-driven talking face generation with 3D Gaussian & 2025 & Science\-Direct & Digitalización de sitios de construcción a gran escala. \\
+    04 & SuraGS: Toward efficient few-shot novel view synthesis via surface-aware Gaussian splatting & 2025 & Science\-Direct & Generación inmediata de gemelos digitales (\textit{Digital Twins}). \\
+    05 & DualPhys-GS: Dual physically-guided 3D Gaussian splatting for underwater scene reconstruction & 2025 & Science\-Direct & Análisis de desprendimiento de fachada en 3D. \\
+    06 & Multi-view optimization and refinement for high-fidelity 4D Gaussian splatting & 2025 & Science\-Direct & Medición y cálculo de volúmenes. \\
+    07 & Simulated Skewed Gaussian Splatting: A New Approach to Geometric Primitives & 2025 & Science\-Direct & Reconstrucción de daños por desastres naturales. \\
+    08 & 3D Gaussian Splatting: Techniques and Applications in Architecture & 2025 & Science\-Direct & Visualización inmersiva para clientes y \textit{stakeholders}. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum\par
+
+\chapter{Marco teórico}
+
+\section{Árbol taxonómico}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figuras/figura2.1.jpg}
+  \caption{Taxonomía.}
+  \label{fig:taxonomia}
+  \vspace{0.2cm}
+
+  \small \textit{Fuente:} Elaboración propia.
+\end{figure}
+
+\section{Benchmarking}
+En esta sección se tiene como punto el objetivo y la mejor metodología a seleccionar, y mediante el cual se definen los criterios de comparación basados en las ramas del árbol taxonómico (Autoconstrucción, Evaluación Estructural y Reconstrucción 3D).\par
+
+
+\begin{table}[htbp]
+  \centering
+  \caption{Criterios de benchmarking para la selección metodológica}
+  \label{tab:criterios-benchmarking}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.26\textwidth} >{\raggedright\arraybackslash}p{0.26\textwidth} >{\raggedright\arraybackslash}p{0.38\textwidth}}
+    \toprule
+    \textbf{Eje de comparación} & \textbf{Criterio específico} & \textbf{Relevancia para la tesis} \\
+    \midrule
+    \textbf{I. Funcional (Autoconstrucción)} & Accesibilidad y usabilidad & ¿Es la herramienta utilizable por un no ingeniero, como un autoconstructor? \\
+    & Enfoque en normativa local & ¿Aplica fórmulas simplificadas o normativas específicas para albañilería? \\
+    & Integración de datos (input) & ¿Permite la entrada de datos mediante imágenes o requiere medidas manuales? \\
+    \midrule
+    \textbf{II. Tecnológico (Reconstrucción 3D)} & Velocidad de procesamiento & ¿Permite la reconstrucción en tiempo real o en un tiempo aceptable para un dispositivo móvil? \\
+    & Precisión y escalabilidad & ¿Se puede medir la geometría de la estructura con fines de predimensionamiento? \\
+    & Requerimientos de hardware & ¿Puede ejecutarse en un dispositivo móvil estándar? \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Benchmarking funcional}
+
+Esta sección compara las soluciones existentes que buscan dimensionar elementos estructurales, identificando la brecha de mercado en la Autoconstrucción.\par
+
+\begin{table}[htbp]
+  \centering
+  \caption{Benchmarking funcional de herramientas para evaluación y predimensionamiento estructural}
+  \label{tab:benchmarking-funcional}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.16\textwidth} >{\raggedright\arraybackslash}p{0.16\textwidth} >{\raggedright\arraybackslash}p{0.15\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.20\textwidth}}
+    \toprule
+    \textbf{Herramienta/Plataforma} & \textbf{Tipo de solución} & \textbf{Público objetivo} & \textbf{Metodología} & \textbf{Brecha identificada} \\
+    \midrule
+    ETABS, SAP2000 & Software de ingeniería (FEM) & Ingenieros estructurales & Análisis sísmico y de cargas detallado mediante cálculo avanzado. & No es accesible para el autoconstructor. Requiere meses de entrenamiento y licencias costosas. \\
+    MathCAD / Excel & Hojas de cálculo / macros & Estudiantes y profesionales & Uso de fórmulas de predimensionamiento basadas en normas, como la RNE E.030, y áreas tributarias. & No es intuitivo; requiere la introducción manual de todos los datos, como áreas, luces y cargas, sin verificación visual. \\
+    Apps genéricas de construcción, como calculadoras de hormigón & Aplicación móvil simple & Obreros y constructores & Calcula volúmenes de materiales o costos unitarios. & No aborda el predimensionamiento estructural, solo el metrado o el presupuesto. Carece de análisis de riesgo. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Benchmarking Tecnologico}
+
+Esta es la sección se realizo la comparativa mediante el cua se justifica la elección de 3D Gaussian Splatting (3DGS) sobre su principal alternativa, Neural Radiance Fields (NeRF), y la fotogrametría tradicional.\par
+
+\begin{table}[htbp]
+  \centering
+  \caption{Benchmarking tecnológico entre fotogrametría, NeRF y 3D Gaussian Splatting}
+  \label{tab:benchmarking-tecnologico}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.16\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth}}
+    \toprule
+    \textbf{Criterio} & \textbf{Fotogrametría (SfM/MVS)} & \textbf{Neural Radiance Fields (NeRF)} & \textbf{3D Gaussian Splatting (3DGS)} \\
+    \midrule
+    Representación & Malla (\textit{mesh}) o nube de puntos & Implícita (volumétrica/vóxeles) & Explícita (basada en puntos gaussianos 3D) \\
+    Velocidad de entrenamiento & Media/alta (depende del tamaño) & Lenta y costosa (requiere optimización de red neuronal). & Muy rápida (más rápido que NeRF). \\
+    Velocidad de \textit{rendering} & Rápida (basada en GPU) & Lenta (requiere consultar la red para cada rayo). & Tiempo real / interactivo (ideal para aplicaciones móviles y VR/AR). \\
+    Requerimientos de cómputo & Alto (requiere un buen GPU/CPU para generar la malla). & Muy alto (intenso en GPU/redes neuronales). & Bajo a medio (mayor eficiencia, permite mejor rendimiento en hardware limitado como un móvil). \\
+    Precisión de profundidad & Alta (escalable, puede medir volúmenes). & Baja (a menudo genera profundidades imprecisas). & Media a alta (mejor que NeRF, pero la escalabilidad requiere pasos adicionales en la implementación). \\
+    Calidad visual & Muy alta (texturas fotorrealistas). & Alta (excelente manejo de reflejos y luces). & Alta / superior (generalmente más nítido y con menos artefactos que NeRF). \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{Autoconstrucción de viviendas}
+
+\subsection{Concepto y características principales}
+Define la autoconstrucción de viviendas y sus principales características en el contexto urbano y periurbano.
+
+\subsection{Autoconstrucción en contextos urbanos periurbanos}
+Describe las particularidades de la autoconstrucción en zonas de expansión urbana, periferias y asentamientos con crecimiento progresivo.
+
+\subsection{Riesgos estructurales asociados}
+Explica los riesgos derivados de la informalidad constructiva, la falta de supervisión técnica, el uso inadecuado de materiales o el incumplimiento de normas.
+
+\section{Evaluación estructural y métodos de inspección}
+
+La autoconstrucción no constituye un fenómeno homogéneo; por el contrario, puede adoptar diversas formas dependiendo de factores socioeconómicos, culturales, territoriales y normativos. Estas variaciones determinan el grado de formalidad, el nivel técnico involucrado, la participación comunitaria y la calidad estructural de las edificaciones resultantes. El análisis de estas tipologías permite comprender los diferentes escenarios en los que se desarrolla la autoconstrucción y, por ende, identificar los puntos críticos que requieren herramientas de diagnóstico y asistencia técnica.\par
+
+\subsection{Inspección estructural tradicional}
+La modalidad más extendida en América Latina y el Perú es la autoconstrucción informal, donde las viviendas se levantan sin supervisión profesional, sin licencias municipales y sin aplicación rigurosa de normas técnicas. Sus características incluyen:\par
+
+\begin{itemize}
+  \item Ausencia de planos arquitectónicos, estructurales o sanitarios.
+  \item Materiales adquiridos por disponibilidad, muchas veces de baja calidad o sin control de procedencia.
+  \item Construcción por etapas en función del ahorro progresivo.
+  \item Participación de maestros de obra empíricos o mano de obra no especializada.
+  \item Intervenciones improvisadas, como ampliaciones o reforzamientos no calculados.
+\end{itemize}
+
+Esta modalidad incrementa la vulnerabilidad estructural, especialmente en zonas sísmicas, y constituye el núcleo del problema que aborda la presente investigación.\par
+
+\subsection{Métodos de ensayos no destructivos (NDT)}
+La autoconstrucción asistida surge como una alternativa intermedia entre la construcción informal y la vivienda formal. En ella, los usuarios participan activamente en el proceso constructivo, pero reciben acompañamiento técnico parcial proporcionado por arquitectos, ingenieros o entidades públicas/privadas. Este tipo de autoconstrucción puede incluir:\par
+
+\begin{itemize}
+  \item Revisión de planos básicos.
+  \item Supervisión parcial en etapas críticas (cimientos, estructura, instalaciones).
+  \item Orientación en compra de materiales.
+  \item Programas municipales o estatales de asistencia (como ATHIS en Brasil o PCA en Perú).
+\end{itemize}
+
+Sin embargo, la cobertura de estos servicios sigue siendo limitada y no responde a la escala del déficit habitacional.\par
+
+\subsection{Necesidad de métodos digitales automatizados}
+Es aquella que se desarrolla por fases, según la disponibilidad de recursos económicos y mano de obra. Se caracteriza por:\par
+
+\begin{itemize}
+  \item Construcción inicial de núcleos básicos (primer piso, un ambiente, servicios mínimos).
+  \item Ampliaciones verticales o horizontales con el tiempo.
+  \item Cambios de uso o redistribuciones sucesivas.
+\end{itemize}
+
+Debido a su naturaleza incremental, estas viviendas suelen presentar irregularidades geométricas y ausencia de continuidad estructural, lo que aumenta la dificultad para realizar inspecciones manuales.\par
+
+\subsection{Autoconstrucción planificada}
+A diferencia de la informal, esta modalidad incluye planificación previa y uso de manuales, guías o modelos estandarizados, aunque todavía conserva participación directa del usuario. Es común en países del Norte Global, donde existen sistemas de self-build housing regulados. Sus características incluyen:\par
+
+\begin{itemize}
+  \item Asesoría técnica obligatoria.
+  \item Acceso a prototipos estructurales validados.
+  \item Normativas que permiten construir con acompañamiento supervisado.
+  \item Cooperativas o asociaciones comunitarias de autoconstructores.
+\end{itemize}
+
+Aunque más segura, esta modalidad es poco común en el contexto peruano.\par
+
+\subsection{Participación comunitaria y autoayuda mutua}
+En muchas zonas rurales y periurbanas, la autoconstrucción se basa en redes de cooperación donde vecinos y familiares aportan mano de obra de manera recíproca. Este sistema, conocido como minga, faena o mano vuelta, tiene características distintivas:\par
+
+\begin{itemize}
+  \item Trabajo colectivo organizado.
+  \item Uso de saberes tradicionales.
+  \item Optimización de tiempos y reducción de costos.
+  \item Mayor cohesión social, aunque sin garantía técnica.
+\end{itemize}
+
+Si bien fortalece la construcción comunitaria, no garantiza seguridad estructural.\par
+
+\chapter{Análisis del problema}
+
+\section{Antecedentes relativos al contexto peruano}
+La autoconstrucción representa el mecanismo predominante de acceso a la vivienda en el Perú, configurando el panorama urbano nacional. Investigaciones recientes demuestran que aproximadamente el 71\% de las viviendas en zonas urbanas se han edificado mediante este sistema, concentrándose principalmente en las periferias limeñas y ciudades emergentes donde la oferta formal resulta insuficiente.\par
+
+Los índices de informalidad revelan cifras alarmantes: apenas el 16\% cuenta con licencia municipal y solo el 14\% recibe asesoría técnica calificada. Esta realidad se traduce en condiciones estructurales precarias: 47\% de techos vulnerables, 30\% de muros deficientes y 12\% de pisos inadecuados según estándares técnicos.\par
+
+La ubicación sísmica del país agrava esta situación. Estadísticas oficiales indican que más del 60\% de estas construcciones nunca ha sido evaluado técnicamente, generando un riesgo latente ante desastres naturales.\par
+
+Ante esta problemática, emergen propuestas de asistencia técnica como el Programa de Construcción Asistida en Carabayllo y experiencias similares en Tacna de parte de su Municipalidad provincial, aunque su alcance sigue siendo limitado.\par
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figuras/figura4.1.jpg}
+  \caption{Diagrama de Ishikawa.}
+  \label{fig:diagrama-ishikawa}
+  \vspace{0.2cm}
+
+  \small \textit{Fuente:} Elaboración propia.
+\end{figure}
+
+\section{Actores que intervienen en la problemática}
+El proceso de evaluación estructural de viviendas autoconstruidas involucra distintos actores técnicos, institucionales y sociales, cuyas decisiones y capacidades influyen directamente en la seguridad estructural del parque habitacional.\par
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.9\textwidth]{figuras/figura4.2.jpg}
+  \caption{Diagrama de Ishikawa.}
+  \label{fig:diagrama-ishikawa-actores}
+  \vspace{0.2cm}
+
+  \small \textit{Fuente:} Elaboración propia.
+\end{figure}
+
+
+
+\subsection{Familias peruanas (Autoconstrucción)}
+Las familias peruanas que optan por la autoconstrucción representan el núcleo del problema, actuando como gestores y ejecutores de sus propias viviendas, generalmente sin acceso a asesoría técnica formal.\par
+
+Motivadas por la necesidad habitacional urgente y limitaciones económicas, recurren a conocimientos empíricos, mano de obra familiar o de maestros de obra no especializados.\par
+
+Además de materiales de calidad variable, lo que genera diseños estructurales inadecuados, falta de refuerzos esenciales y ausencia de cumplimiento normativo, incrementando significativamente la vulnerabilidad sísmica de sus viviendas y exponiéndose a riesgos de colapso ante desastres naturales.\par
+
+\subsection{Autoridades municipalidades}
+
+Las municipalidades distritales, como entidades responsables de supervisar y fiscalizar las construcciones en su jurisdicción, enfrentan serias limitaciones operativas que impiden un control efectivo de la autoconstrucción.\par
+
+Ellos hacen uso de equipos técnicos reducidos, insuficiente especialización en ingeniería estructural y recursos tecnológicos escasos, su capacidad de inspección se restringe a revisiones visuales superficiales, dejando sin detectar la mayoría de las deficiencias estructurales críticas en viviendas autoconstruidas, lo que perpetúa la informalidad y el riesgo en el parque habitacional.\par
+
+
+\chapter{Diseño y desarrollo de la solución}
+
+\section{Herramientas y entorno de desarrollo}
+
+\subsection{Desarrollo del backend}
+Describe las tecnologías, lenguajes, frameworks y servicios usados para implementar el backend de la solución.
+
+\subsection{Infraestructura en la nube (Google Cloud Platform)}
+Explica los servicios de Google Cloud Platform empleados para almacenamiento, procesamiento, despliegue, seguridad o escalabilidad.
+
+\subsection{Desarrollo móvil}
+Describe la plataforma, herramientas y decisiones técnicas asociadas al desarrollo de la aplicación móvil.
+
+\section{Arquitectura de la solución}
+Presenta la arquitectura general del sistema y la interacción entre sus componentes principales.
+
+\subsection{Flujo de ingesta de datos (patrón Signed URL)}
+Explica el flujo mediante el cual los usuarios cargan imágenes, videos u otros datos al sistema utilizando URLs firmadas.
+
+\subsection{Diagrama de componentes (descripción)}
+Describe los componentes principales del sistema, sus responsabilidades y las relaciones entre ellos.
+
+\section{Implementación de servicios backend}
+Explica la implementación de los servicios backend, endpoints, lógica de negocio, autenticación, almacenamiento y procesamiento de datos.
+
+\chapter{Discusión, conclusiones y recomendaciones}
+
+\section{Discusión}
+Interpreta los resultados de la solución propuesta, sus alcances, limitaciones y relación con los trabajos revisados en el estado del arte.
+
+\section{Conclusiones}
+
+\subsection{Conclusión general}
+Redacta una conclusión global directamente vinculada con el objetivo general de la tesis.
+
+\subsection{Conclusiones específicas}
+
+\subsubsection{Objetivo específico 1}
+Redacta la conclusión correspondiente al primer objetivo específico.
+
+\subsubsection{Objetivo específico 2}
+Redacta la conclusión correspondiente al segundo objetivo específico.
+
+\subsubsection{Objetivo específico 3}
+Redacta la conclusión correspondiente al tercer objetivo específico.
+
+\subsection{Limitaciones}
+Resume las principales limitaciones metodológicas, técnicas, sociales o de alcance identificadas durante el desarrollo de la investigación.
+
+\subsection{Recomendaciones y trabajos futuros}
+Propón mejoras, líneas de investigación futura, ampliaciones de la solución o validaciones adicionales.
+
+\begin{thebibliography}{9}
+
+\bibitem{kerbl2023}
+Kerbl, B., Kopanas, G., Leimk{\"u}hler, T., y Drettakis, G. (2023). 3D Gaussian Splatting for Real-Time Radiance Field Rendering. \textit{ACM Transactions on Graphics}.
+
+\bibitem{mildenhall2020}
+Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., y Ng, R. (2020). NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. \textit{Communications of the ACM}.
+
+\end{thebibliography}
+
+\appendix
+
+\chapter{Matriz de consistencia}
+Incluye aquí la matriz de consistencia de la investigación.
+
+\chapter{Instrumentos de recolección de datos}
+Incluye encuestas, guías de entrevista, fichas de observación u otros instrumentos.
+
+\chapter{Material complementario}
+Incluye capturas, diagramas, configuraciones, tablas adicionales o evidencias del desarrollo de la solución.
+
+\end{document}
