@@ -730,26 +730,63 @@ Ellos hacen uso de equipos técnicos reducidos, insuficiente especialización en
 
 \section{Herramientas y entorno de desarrollo}
 
+En esta sección se describen las tecnologías, frameworks, lenguajes de programación y herramientas seleccionadas para la construcción de los diferentes módulos del sistema SE-PEAV (Sistema Edge de Predimensionamiento Estructural y Análisis de Vulnerabilidad).
+
 \subsection{Desarrollo del backend}
-Describe las tecnologías, lenguajes, frameworks y servicios usados para implementar el backend de la solución.
+El backend del sistema se implementó utilizando el lenguaje de programación \textbf{Python 3.12}, seleccionado por su madurez y amplio ecosistema para el desarrollo de inteligencia artificial y procesamiento tridimensional. Las principales herramientas y bibliotecas utilizadas son:
+\begin{itemize}
+    \item \textbf{FastAPI (v0.109.0):} Framework web asíncrono de alto rendimiento para la creación de la API REST que gestiona las peticiones de los clientes (móvil y web).
+    \item \textbf{SQLAlchemy y Alembic:} Para el mapeo objeto-relacional (ORM) y el control de migraciones de la base de datos relacional PostgreSQL.
+    \item \textbf{Celery (v5.3.6):} Gestor de colas de tareas asíncronas para el procesamiento diferido y pesado de la reconstrucción tridimensional y el análisis mediante IA.
+    \item \textbf{OpenCV, Open3D y Trimesh:} Bibliotecas clave para el procesamiento de imágenes, manipulación de nubes de puntos densas e interpolación de mallas estructurales tridimensionales.
+\end{itemize}
 
-\subsection{Infraestructura en la nube (Google Cloud Platform)}
-Explica los servicios de Google Cloud Platform empleados para almacenamiento, procesamiento, despliegue, seguridad o escalabilidad.
+\subsection{Infraestructura de almacenamiento y contenedores}
+Para garantizar la portabilidad y escalabilidad de la solución en entornos locales y en la nube (como Google Cloud Platform), el sistema utiliza las siguientes herramientas de infraestructura:
+\begin{itemize}
+    \item \textbf{Docker y Docker Compose:} Herramientas de contenedorización que encapsulan los servicios de la aplicación (API Backend, Celery Workers, base de datos PostgreSQL, Redis y MinIO) asegurando consistencia entre desarrollo y producción.
+    \item \textbf{Redis (v5.0.1):} Utilizado como intermediario de mensajería (broker) de alto rendimiento para la orquestación de tareas en Celery.
+    \item \textbf{MinIO / Amazon S3:} Servidor de almacenamiento de objetos local compatible con la API de AWS S3, utilizado para resguardar los videos capturados, frames extraídos, nubes de puntos PLY y reportes técnicos en formato PDF.
+\end{itemize}
 
-\subsection{Desarrollo móvil}
-Describe la plataforma, herramientas y decisiones técnicas asociadas al desarrollo de la aplicación móvil.
+\subsection{Desarrollo móvil y de presentación visual}
+La interfaz del usuario se divide en dos entornos diferenciados según el rol operativo:
+\begin{itemize}
+    \item \textbf{Aplicación Móvil (Flutter \& Riverpod):} Construida con el SDK de Flutter (Dart) para permitir el registro de proyectos en campo, la autenticación mediante JWT de los inspectores, y la captura asistida de video con telemetría. Utiliza Riverpod para la gestión del estado global de la aplicación y Dio como cliente HTTP.
+    \item \textbf{Visor Web Interactivo 3D (Three.js):} Desarrollado con HTML5, CSS3 vanilla y la biblioteca gráfica \textbf{Three.js} basada en WebGL. Este visor permite visualizar la nube de puntos densa del edificio y proyectar interactivamente las patologías estructurales detectadas por la inteligencia artificial sobre un modelo digital tridimensional.
+\end{itemize}
 
 \section{Arquitectura de la solución}
-Presenta la arquitectura general del sistema y la interacción entre sus componentes principales.
 
-\subsection{Flujo de ingesta de datos (patrón Signed URL)}
-Explica el flujo mediante el cual los usuarios cargan imágenes, videos u otros datos al sistema utilizando URLs firmadas.
+La arquitectura del sistema SE-PEAV se basa en un diseño modular por capas que separa las responsabilidades de captura de datos, ingestión, procesamiento por lotes en segundo plano, análisis inferencial e interfaces de presentación.
 
-\subsection{Diagrama de componentes (descripción)}
-Describe los componentes principales del sistema, sus responsabilidades y las relaciones entre ellos.
+\subsection{Flujo de ingesta de datos (patrón de almacenamiento directo)}
+El flujo de ingesta de datos de campo asegura que los archivos pesados (como videos 4K capturados por drones o dispositivos móviles) se carguen de manera eficiente y segura:
+\begin{enumerate}
+    \item El dispositivo móvil o la estación de control del dron solicita un punto de carga a la API de FastAPI a través del endpoint respectivo.
+    \item La API genera y retorna una ruta de subida directa o un canal optimizado para la transferencia del archivo.
+    \item El cliente realiza la carga del video o las imágenes directamente hacia el almacenamiento de objetos de MinIO/S3.
+    \item Al finalizar la transferencia, el backend registra la metadata del archivo en la base de datos relacional y añade una tarea a la cola de procesamiento de Celery.
+\end{enumerate}
+
+\subsection{Diagrama de componentes e interacción}
+El pipeline de procesamiento se divide en cuatro capas operativas esenciales:
+\begin{itemize}
+    \item \textbf{Capa de Ingesta (Ingest Layer):} Encargada de recibir los videos e imágenes de campo. Ejecuta la extracción controlada de fotogramas a una tasa de muestreo adaptativa (fps) mediante OpenCV.
+    \item \textbf{Motor Geométrico (Geometry Layer):} Invoca rutinas de Structure from Motion (SfM) con COLMAP para determinar las orientaciones de cámara y generar la nube de puntos dispersa, que posteriormente sirve como base para el entrenamiento de elipsoides con 3D Gaussian Splatting (3DGS).
+    \item \textbf{Capa de Ingesta y Análisis (Analysis Layer):} Ejecuta de forma paralela la inferencia con modelos YOLOv8 para segmentar grietas y fallas estructurales superficiales, y calcula métricas de vulnerabilidad basadas en la norma técnica peruana de albañilería confinada \textbf{E.060} (verificando el espesor de muros portantes y distanciamiento de columnas).
+    \item \textbf{Capa de Reportes (Reporting Layer):} Consolida las vulnerabilidades, calcula el score de riesgo acumulado (Bajo, Medio, Alto, Crítico) y compila un reporte en formato PDF/HTML mediante WeasyPrint, enlazándolo con el visor interactivo Three.js.
+\end{itemize}
 
 \section{Implementación de servicios backend}
-Explica la implementación de los servicios backend, endpoints, lógica de negocio, autenticación, almacenamiento y procesamiento de datos.
+
+La capa de servicios backend de la API REST fue estructurada bajo una arquitectura limpia en FastAPI. Los principales endpoints e implementaciones lógicas desarrolladas son:
+\begin{itemize}
+    \item \textbf{Servicio de Autenticación (\texttt{/auth}):} Implementa registro de usuarios, login con hashing de contraseñas mediante \texttt{bcrypt} y generación de tokens de seguridad JWT persistentes.
+    \item \textbf{Servicio de Proyectos (\texttt{/projects}):} Permite la creación, lectura y listado georreferenciado de los proyectos de inspección asignados a cada ingeniero.
+    \item \textbf{Servicio de Inspecciones (\texttt{/inspections}):} Gestiona el ciclo de vida de una inspección, controlando los estados de procesamiento (\texttt{PENDING}, \texttt{PROCESSING}, \texttt{COMPLETED}, \texttt{FAILED}) y exponiendo endpoints de consulta para las detecciones de fallas y métricas estructurales calculadas.
+    \item \textbf{Servicio de Reportes (\texttt{/reports}):} Genera y sirve el archivo de reporte final en formato PDF, además de enlazar dinámicamente con el visor tridimensional interactivo mediante la ruta \texttt{/viewer/\{inspection\_id\}}.
+\end{itemize}
 
 \chapter{Discusión, conclusiones y recomendaciones}
 
