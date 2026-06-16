@@ -195,6 +195,11 @@ Contar con un sistema digital capaz de analizar de forma automatizada las condic
 
 La implementación de herramientas de reconstrucción 3D e inteligencia artificial no solo representa un aporte tecnológico al campo de la ingeniería civil, sino que también constituye una estrategia de inclusión social al facilitar el acceso a evaluaciones técnicas precisas, incluso en zonas donde no se dispone de especialistas. En este sentido, la investigación busca contribuir al fortalecimiento de la seguridad habitacional, la sostenibilidad urbana y la modernización de la gestión pública en materia de vivienda.\par
 
+\section{Alcance del prototipo}
+El alcance de la presente investigación se delimita al desarrollo de un prototipo mínimo viable del sistema SE-PEAV, orientado a demostrar un flujo técnico reproducible para el registro, almacenamiento, visualización, análisis preliminar y generación de reportes de una inspección estructural controlada. El prototipo no reemplaza el juicio profesional de un ingeniero civil ni constituye por sí mismo un dictamen estructural oficial; su propósito es servir como herramienta de apoyo para organizar evidencias, estandarizar criterios preliminares de observación y facilitar la trazabilidad de hallazgos asociados a viviendas autoconstruidas.\par
+
+El MVP comprende una API backend funcional para gestionar proyectos, inspecciones, resultados y reportes; una base de datos relacional para persistir la información del caso; un flujo de almacenamiento de evidencias mediante almacenamiento de objetos o mecanismo documentado equivalente; un visor web conectado a datos de inspección; un análisis simplificado de vulnerabilidad basado en criterios trazables; y la generación de un reporte técnico a partir de los datos registrados. Quedan fuera del alcance mínimo la reconstrucción tridimensional completa mediante 3D Gaussian Splatting como requisito operativo, el entrenamiento propio de modelos YOLO, la captura LiDAR real y la aplicación móvil completa, los cuales se reconocen como componentes experimentales o líneas de trabajo futuro.\par
+
 \section{Limitaciones}
 
 \subsection{Limitación espacial}
@@ -204,7 +209,9 @@ El estudio se enfocará en viviendas sociales de autoconstrucción en zonas urba
 El prototipo estará orientado principalmente a fiscalizadores municipales, maestros de obra y estudiantes de ingeniería civil, quienes podrán utilizarlo como herramienta de verificación rápida y apoyo en la supervisión de edificaciones.
 
 \subsection{Limitación técnica}
-Se utilizará 3D Gaussian Splatting para la reconstrucción tridimensional en tiempo real.
+La validación técnica del prototipo se realizará con datos controlados y evidencias previamente seleccionadas, por lo que los resultados obtenidos deben interpretarse como una evaluación preliminar y no como un diagnóstico estructural definitivo. El análisis de vulnerabilidad implementado en el MVP será simplificado y trazable, basado en criterios observables y registros estructurados, sin asumir inferencia automática completa mediante modelos de inteligencia artificial entrenados específicamente para el contexto peruano.\par
+
+Asimismo, las técnicas de reconstrucción tridimensional avanzada, como COLMAP, 3D Gaussian Splatting y procesamiento LiDAR, se consideran componentes experimentales dentro de la investigación. Su revisión aporta al diseño conceptual del sistema, pero el MVP defendible se centra en la integración verificable de backend, base de datos, almacenamiento, visor web, análisis simplificado y reporte técnico.\par
 
 \section{Organización de la tesis}
 La presente tesis está estructurada en seis capítulos:\par
@@ -728,6 +735,29 @@ Ellos hacen uso de equipos técnicos reducidos, insuficiente especialización en
 
 \chapter{Diseño y desarrollo de la solución}
 
+\section{Alcance funcional del MVP}
+
+Para evitar ambigüedad entre componentes implementados, simulados y proyectados, el prototipo SE-PEAV se organiza en cuatro niveles de madurez técnica. Esta clasificación permite sustentar el alcance real del MVP y diferenciar el flujo funcional defendible de las líneas experimentales asociadas a reconstrucción tridimensional avanzada e inteligencia artificial.\par
+
+\begin{table}[htbp]
+  \centering
+  \caption{Clasificación funcional de componentes del MVP}
+  \label{tab:clasificacion-mvp}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{>{\raggedright\arraybackslash}p{0.22\textwidth} >{\raggedright\arraybackslash}p{0.68\textwidth}}
+    \toprule
+    \textbf{Clasificación} & \textbf{Componentes considerados} \\
+    \midrule
+    Funcional en el MVP & API backend para proyectos, inspecciones, resultados y reportes; persistencia en base de datos; flujo de almacenamiento de evidencias; visor web conectado a datos; análisis simplificado de vulnerabilidad; generación de reporte técnico. \\
+    Simulado o controlado & Datos de entrada preparados, evidencias visuales seleccionadas, hallazgos estructurados y resultados de análisis usados para reproducir un caso de prueba verificable. \\
+    Experimental & Rutinas asociadas a COLMAP, 3D Gaussian Splatting, inferencia con YOLO no entrenado específicamente y métricas geométricas avanzadas. \\
+    Trabajo futuro & Aplicación móvil completa, captura LiDAR real, entrenamiento propio de modelos de inteligencia artificial, validación con usuarios externos y despliegue en producción. \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
 \section{Herramientas y entorno de desarrollo}
 
 En esta sección se describen las tecnologías, frameworks, lenguajes de programación y herramientas seleccionadas para la construcción de los diferentes módulos del sistema SE-PEAV (Sistema Edge de Predimensionamiento Estructural y Análisis de Vulnerabilidad).
@@ -810,10 +840,14 @@ Redacta la conclusión correspondiente al segundo objetivo específico.
 Redacta la conclusión correspondiente al tercer objetivo específico.
 
 \subsection{Limitaciones}
-Resume las principales limitaciones metodológicas, técnicas, sociales o de alcance identificadas durante el desarrollo de la investigación.
+El MVP presenta limitaciones propias de un prototipo académico. En primer lugar, el caso de prueba se ejecuta con datos controlados, por lo que no representa la diversidad completa de viviendas autoconstruidas existentes en el Perú. En segundo lugar, el análisis de vulnerabilidad corresponde a una aproximación simplificada y trazable, orientada a demostrar el flujo técnico del sistema, mas no a emitir un dictamen estructural oficial. En tercer lugar, las detecciones automáticas y reconstrucciones 3D avanzadas no constituyen el núcleo validado del MVP, sino componentes experimentales cuya integración completa requiere mayor disponibilidad de datos, calibración y validación técnica especializada.\par
+
+Por estas razones, los resultados del prototipo deben interpretarse como evidencia de factibilidad técnica del flujo digital propuesto: registro de inspección, almacenamiento de evidencias, visualización, análisis preliminar y generación de reporte. La aplicación práctica en contextos reales requerirá validación adicional con profesionales de ingeniería civil, casos de campo y criterios normativos más exhaustivos.\par
 
 \subsection{Recomendaciones y trabajos futuros}
-Propón mejoras, líneas de investigación futura, ampliaciones de la solución o validaciones adicionales.
+Como trabajo futuro se recomienda ampliar el prototipo hacia una aplicación móvil completa para captura guiada de evidencias en campo, integrar sensores LiDAR o mecanismos de fotogrametría calibrada, validar reconstrucciones 3D mediante COLMAP o 3D Gaussian Splatting, y entrenar modelos de inteligencia artificial con un dataset propio de patologías estructurales en viviendas autoconstruidas peruanas. También se recomienda incorporar criterios normativos más detallados, realizar validaciones con inspectores municipales o ingenieros civiles, desplegar el sistema en un entorno productivo controlado y evaluar su usabilidad mediante instrumentos formales.\par
+
+Estas ampliaciones permitirían pasar de un MVP demostrativo a una plataforma de apoyo técnico más robusta, manteniendo la premisa central de la investigación: facilitar evaluaciones preliminares, trazables y accesibles sin sustituir la responsabilidad profesional del especialista estructural.\par
 
 \begin{thebibliography}{9}
 
@@ -832,6 +866,34 @@ Incluye aquí la matriz de consistencia de la investigación.
 
 \chapter{Instrumentos de recolección de datos}
 Incluye encuestas, guías de entrevista, fichas de observación u otros instrumentos.
+
+\chapter{Caso de prueba mínimo reproducible}
+
+El caso de prueba mínimo reproducible se define como una inspección controlada de una vivienda autoconstruida, construida a partir de datos preparados y evidencias verificables. Su finalidad es demostrar el funcionamiento integrado del MVP sin depender de captura real en campo, entrenamiento de modelos de inteligencia artificial, reconstrucción 3D completa ni sensores LiDAR. Bajo este enfoque, el caso permite validar el flujo técnico principal del sistema: registro de información, persistencia, almacenamiento de evidencias, visualización, análisis preliminar y generación de reporte.\par
+
+La entrada del caso estará compuesta por un proyecto de prueba, una inspección asociada, evidencias visuales controladas y un conjunto de hallazgos definidos en formato estructurado. El flujo esperado comprende la creación del proyecto, el registro de la inspección, la asociación de evidencias, la ejecución del análisis simplificado, la consulta de resultados, la apertura del visor y la generación del reporte técnico. El caso se considerará aceptado cuando el sistema produzca salidas consistentes y reproducibles: registros persistidos, evidencias asociadas, resultado preliminar trazable, visor con datos del caso y reporte generado desde la información de la inspección.\par
+
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.28\textwidth} >{\raggedright\arraybackslash}p{0.62\textwidth}}
+  \caption{Ficha del caso de prueba mínimo reproducible}
+  \label{tab:caso-prueba-minimo}\\
+  \toprule
+  \textbf{Campo} & \textbf{Descripción} \\
+  \midrule
+  \endfirsthead
+  \toprule
+  \textbf{Campo} & \textbf{Descripción} \\
+  \midrule
+  \endhead
+  Nombre del caso & Inspección controlada de vivienda autoconstruida con evidencias simuladas y análisis simplificado. \\
+  Objetivo & Verificar que el MVP permite registrar una inspección, persistir datos, asociar evidencias, visualizar hallazgos, calcular un resultado preliminar trazable y generar un reporte técnico reproducible. \\
+  Entrada & Proyecto de vivienda controlada, inspección asociada, conjunto de imágenes o evidencias de prueba, archivo JSON con hallazgos simulados o controlados, parámetros básicos del análisis y metadatos del inmueble. \\
+  Datos y evidencias necesarias & JSON de proyecto, JSON de inspección, imágenes controladas o referencias documentadas, registros en PostgreSQL, objeto o ruta de storage, respuesta de API, captura del visor, tabla de score y reporte HTML/PDF generado. \\
+  Flujo esperado & Crear proyecto; crear inspección; cargar o registrar evidencias; guardar metadatos; ejecutar análisis simplificado; consultar resultados; abrir visor conectado a la inspección; generar reporte; conservar capturas y archivos de salida. \\
+  Salidas esperadas & Registro persistido de proyecto e inspección, evidencias asociadas, resultado de vulnerabilidad preliminar, visor con datos del caso, reporte técnico generado y conjunto de capturas para anexos. \\
+  Criterios de aceptación & La API responde correctamente; la inspección queda persistida; las evidencias quedan registradas o documentadas; el análisis produce un score trazable; el visor muestra datos del caso; el reporte se genera desde los datos de la inspección; el flujo puede repetirse con los mismos datos controlados. \\
+  Evidencia a capturar & Captura Swagger/Postman, consulta de base de datos, captura o ruta de storage, JSON de entrada, JSON de salida, captura del visor, tabla de criterios de análisis, reporte generado y breve guion de reproducción. \\
+  \bottomrule
+\end{longtable}
 
 \chapter{Material complementario}
 Incluye capturas, diagramas, configuraciones, tablas adicionales o evidencias del desarrollo de la solución.
