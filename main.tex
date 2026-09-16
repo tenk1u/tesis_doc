@@ -155,28 +155,32 @@ De esta manera, la presente investigación propone el desarrollo de un prototipo
 
 
 \section{Definición del problema}
-Presenta la situación problemática, la brecha tecnológica o metodológica identificada y su impacto en el ámbito de estudio.
+La investigación aborda la integración de datos visuales obtenidos en viviendas autoconstruidas, reconstrucción tridimensional e inteligencia artificial en un flujo de apoyo a la identificación de deficiencias constructivas observables. El problema se delimita a la obtención y preparación de datos, la representación tridimensional de los elementos de interés, la identificación y localización de hallazgos y la evaluación del desempeño del prototipo. A partir de esta delimitación se formulan las siguientes preguntas de investigación.
 
 \subsection{Problema general}
-La carencia de herramientas digitales accesibles y automatizadas que permitan evaluar la calidad estructural de las viviendas autoconstruidas en el Perú incrementa la vulnerabilidad del parque habitacional y limita la capacidad de supervisión técnica municipal
+¿Cómo desarrollar y evaluar un prototipo tecnológico que integre reconstrucción tridimensional mediante 3D Gaussian Splatting e inteligencia artificial para apoyar la identificación de deficiencias constructivas observables en viviendas autoconstruidas, a partir de datos visuales capturados en condiciones reales?
 
 \subsection{Problemas específicos}
 \begin{enumerate}
-  \item La alta tasa de informalidad en los procesos de autoconstrucción en el Perú incrementa el riesgo de colapso ante eventos sísmicos o climáticos.
-  \item No existen sistemas tecnológicos que integren el procesamiento de imágenes y videos para reconstruir digitalmente viviendas autoconstruidas y evaluar sus características geométricas o estructurales.
-  \item La evaluación estructural sigue dependiendo del criterio subjetivo de inspectores o ingenieros, sin apoyo de modelos automatizados de inteligencia artificial que permitan identificar de forma estandarizada errores o deficiencias constructivas.
+  \item ¿Qué deficiencias constructivas observables, requisitos de información y criterios de evaluación deben considerarse para orientar el desarrollo del prototipo?
+  \item ¿Cómo obtener y preparar un conjunto de datos visuales de viviendas autoconstruidas reales que permita desarrollar y evaluar la reconstrucción tridimensional y la identificación de deficiencias constructivas?
+  \item ¿Cómo reconstruir tridimensionalmente las viviendas mediante 3D Gaussian Splatting, a partir de los datos visuales preparados, para visualizar y localizar los elementos de interés?
+  \item ¿Cómo identificar las deficiencias constructivas seleccionadas mediante inteligencia artificial y asociar sus detecciones con la representación tridimensional de la vivienda?
+  \item ¿Qué desempeño presenta el prototipo en términos de calidad de reconstrucción, detección y localización de deficiencias constructivas y tiempo de procesamiento, respecto de los datos de referencia y criterios de evaluación definidos?
 \end{enumerate}
 
 \section{Objetivos}
 
 \subsection{Objetivo general}
-Reducir el riesgo e incremento de la seguridad habitacional, mediante el desarrollo e implementación de una solución tecnológica basado en reconstrucción 3D y modelos de  inteligencia artificial en el Perú
+Desarrollar y evaluar un prototipo tecnológico que integre reconstrucción tridimensional mediante 3D Gaussian Splatting e inteligencia artificial para apoyar la identificación de deficiencias constructivas observables en viviendas autoconstruidas, a partir de datos visuales capturados en condiciones reales.
 
 \subsection{Objetivos específicos}
 \begin{enumerate}
-  \item Identificar los principales factores técnicos asociados a la vulnerabilidad estructural.
-  \item Implementar un algoritmo capaz de generar modelos tridimensionales a partir de fotografías, videos o escaneos LiDAR de viviendas autoconstruidas, optimizando su precisión geométrica.
-  \item Entrenamiento de los modelos de inteligencia artificial basados en los modelos 3D obtenidos  que detectan deficiencias estructurales o constructivas.
+  \item Definir las deficiencias constructivas observables, los requisitos de información y los criterios de evaluación del prototipo, mediante revisión documental y criterios técnicos sustentados.
+  \item Construir un conjunto de datos visuales de viviendas autoconstruidas reales mediante un protocolo de captura de fotografías y videos, selección de imágenes, extracción de fotogramas, preprocesamiento y anotación, para su utilización en el desarrollo y la evaluación de la reconstrucción tridimensional y la identificación de deficiencias constructivas.
+  \item Implementar un procedimiento de reconstrucción tridimensional mediante 3D Gaussian Splatting, a partir de los datos visuales preparados, que permita visualizar y localizar los elementos de interés de las viviendas autoconstruidas.
+  \item Integrar un modelo de inteligencia artificial para identificar las deficiencias constructivas seleccionadas y asociar sus detecciones con la representación tridimensional de la vivienda dentro del prototipo.
+  \item Evaluar el desempeño del prototipo en términos de calidad de reconstrucción, detección y localización de deficiencias constructivas y tiempo de procesamiento, mediante datos de referencia, métricas y criterios de evaluación definidos previamente y un protocolo reproducible.
 \end{enumerate}
 
 \section{Justificación}
@@ -196,22 +200,24 @@ Contar con un sistema digital capaz de analizar de forma automatizada las condic
 La implementación de herramientas de reconstrucción 3D e inteligencia artificial no solo representa un aporte tecnológico al campo de la ingeniería civil, sino que también constituye una estrategia de inclusión social al facilitar el acceso a evaluaciones técnicas precisas, incluso en zonas donde no se dispone de especialistas. En este sentido, la investigación busca contribuir al fortalecimiento de la seguridad habitacional, la sostenibilidad urbana y la modernización de la gestión pública en materia de vivienda.\par
 
 \section{Alcance del prototipo}
-El alcance de la presente investigación se delimita al desarrollo de un prototipo mínimo viable del sistema SE-PEAV, orientado a demostrar un flujo técnico reproducible para el registro, almacenamiento, visualización, análisis preliminar y generación de reportes de una inspección estructural controlada. El prototipo no reemplaza el juicio profesional de un ingeniero civil ni constituye por sí mismo un dictamen estructural oficial; su propósito es servir como herramienta de apoyo para organizar evidencias, estandarizar criterios preliminares de observación y facilitar la trazabilidad de hallazgos asociados a viviendas autoconstruidas.\par
+El alcance de la presente investigación comprende el desarrollo y la evaluación del prototipo SE-PEAV, desde la captura de datos visuales en viviendas autoconstruidas reales hasta la reconstrucción tridimensional, la identificación de deficiencias constructivas mediante inteligencia artificial y la presentación de hallazgos localizados. La reconstrucción mediante 3D Gaussian Splatting y la integración del modelo de inteligencia artificial constituyen componentes centrales que deberán implementarse y evaluarse. El prototipo apoyará la evaluación preliminar de las deficiencias observables seleccionadas; no sustituirá el juicio profesional de un ingeniero civil ni constituirá un dictamen estructural oficial.\par
 
-El MVP comprende una API backend funcional para gestionar proyectos, inspecciones, resultados y reportes; una base de datos relacional para persistir la información del caso; un flujo de almacenamiento de evidencias mediante almacenamiento de objetos o mecanismo documentado equivalente; un visor web conectado a datos de inspección; un análisis simplificado de vulnerabilidad basado en criterios trazables; y la generación de un reporte técnico a partir de los datos registrados. Quedan fuera del alcance mínimo la reconstrucción tridimensional completa mediante 3D Gaussian Splatting como requisito operativo, el entrenamiento propio de modelos YOLO, la captura LiDAR real y la aplicación móvil completa, los cuales se reconocen como componentes experimentales o líneas de trabajo futuro.\par
+La construcción del conjunto de datos incluirá un protocolo de captura, criterios de calidad y cobertura visual, selección de fotografías o fotogramas, preprocesamiento, organización de metadatos y anotación de las deficiencias seleccionadas. Las anotaciones deberán contar con criterios documentados y revisión técnica. La separación de los datos destinados al ajuste del modelo, cuando corresponda, y a su evaluación se realizará por vivienda, evitando que registros de una misma vivienda se utilicen en ambos grupos. El tamaño y la composición del conjunto de datos se documentarán a partir de la captura realizada.\par
+
+El prototipo integrará servicios de registro y almacenamiento, reconstrucción tridimensional, inferencia mediante inteligencia artificial, asociación de detecciones con la representación tridimensional, visualización y generación de reportes. La selección, adaptación o ajuste del modelo se sustentará en las categorías de deficiencias y los datos disponibles; no se establece como requisito entrenar un modelo desde cero. La evaluación empleará datos de referencia y métricas definidas antes de interpretar los resultados. La captura LiDAR, una aplicación móvil completa y el despliegue en producción quedan fuera del alcance de esta investigación.\par
 
 \section{Limitaciones}
 
 \subsection{Limitación espacial}
-El estudio se enfocará en viviendas sociales de autoconstrucción en zonas urbanas y periurbanas del Perú, priorizando el distrito de Lima Carabayllo Metropolitana con alta vulnerabilidad estructural.
+El estudio se enfocará en viviendas autoconstruidas de zonas urbanas y periurbanas, priorizando el distrito de Carabayllo, en Lima Metropolitana. La selección de los casos y las condiciones de acceso para la captura se documentarán en el protocolo de recolección de datos.
 
 \subsection{Limitación social}
 El prototipo estará orientado principalmente a fiscalizadores municipales, maestros de obra y estudiantes de ingeniería civil, quienes podrán utilizarlo como herramienta de verificación rápida y apoyo en la supervisión de edificaciones.
 
 \subsection{Limitación técnica}
-La validación técnica del prototipo se realizará con datos controlados y evidencias previamente seleccionadas, por lo que los resultados obtenidos deben interpretarse como una evaluación preliminar y no como un diagnóstico estructural definitivo. El análisis de vulnerabilidad implementado en el MVP será simplificado y trazable, basado en criterios observables y registros estructurados, sin asumir inferencia automática completa mediante modelos de inteligencia artificial entrenados específicamente para el contexto peruano.\par
+La evaluación se realizará con registros visuales capturados en viviendas reales y datos de referencia documentados. Su alcance estará delimitado por las viviendas seleccionadas, las categorías de deficiencias anotadas, las condiciones de captura y los recursos de procesamiento disponibles. Se documentarán estas condiciones para interpretar los resultados y establecer los límites de su generalización.\par
 
-Asimismo, las técnicas de reconstrucción tridimensional avanzada, como COLMAP, 3D Gaussian Splatting y procesamiento LiDAR, se consideran componentes experimentales dentro de la investigación. Su revisión aporta al diseño conceptual del sistema, pero el MVP defendible se centra en la integración verificable de backend, base de datos, almacenamiento, visor web, análisis simplificado y reporte técnico.\par
+La evaluación distinguirá la calidad visual de la reconstrucción, su precisión geométrica cuando se disponga de medidas de referencia y el desempeño en detección y localización de las deficiencias seleccionadas. Las métricas de apariencia visual no se utilizarán por sí solas como evidencia de exactitud dimensional. El cumplimiento de los objetivos se sustentará en resultados medidos, sin inferir una reducción del riesgo estructural a escala nacional a partir del funcionamiento del prototipo.\par
 
 \section{Organización de la tesis}
 La presente tesis está estructurada en seis capítulos:\par
@@ -574,7 +580,7 @@ Esta sección compara las soluciones existentes que buscan dimensionar elementos
   \renewcommand{\arraystretch}{1.15}
   \begin{tabular}{>{\raggedright\arraybackslash}p{0.16\textwidth} >{\raggedright\arraybackslash}p{0.16\textwidth} >{\raggedright\arraybackslash}p{0.15\textwidth} >{\raggedright\arraybackslash}p{0.25\textwidth} >{\raggedright\arraybackslash}p{0.20\textwidth}}
     \toprule
-    \textbf{Herramienta/Plataforma} & \textbf{Tipo de solución} & \textbf{Público objetivo} & \textbf{Metodología} & \textbf{Brecha identificada} \\
+    \textbf{Herramienta/\newline Plataforma} & \textbf{Tipo de solución} & \textbf{Público objetivo} & \textbf{Metodología} & \textbf{Brecha identificada} \\
     \midrule
     ETABS, SAP2000 & Software de ingeniería (FEM) & Ingenieros estructurales & Análisis sísmico y de cargas detallado mediante cálculo avanzado. & No es accesible para el autoconstructor. Requiere meses de entrenamiento y licencias costosas. \\
     MathCAD / Excel & Hojas de cálculo / macros & Estudiantes y profesionales & Uso de fórmulas de predimensionamiento basadas en normas, como la RNE E.030, y áreas tributarias. & No es intuitivo; requiere la introducción manual de todos los datos, como áreas, luces y cargas, sin verificación visual. \\
@@ -737,11 +743,11 @@ Ellos hacen uso de equipos técnicos reducidos, insuficiente especialización en
 
 \section{Alcance funcional del MVP}
 
-Para evitar ambigüedad entre componentes implementados, simulados y proyectados, el prototipo SE-PEAV se organiza en cuatro niveles de madurez técnica. Esta clasificación permite sustentar el alcance real del MVP y diferenciar el flujo funcional defendible de las líneas experimentales asociadas a reconstrucción tridimensional avanzada e inteligencia artificial.\par
+El alcance funcional del prototipo SE-PEAV se organiza según los componentes necesarios para cumplir los cinco objetivos específicos. La clasificación siguiente establece compromisos de desarrollo y evaluación; no representa una declaración de que los componentes ya se encuentren implementados o validados. Cada componente deberá acompañarse de evidencias de ejecución y resultados verificables.\par
 
 \begin{table}[htbp]
   \centering
-  \caption{Clasificación funcional de componentes del MVP}
+  \caption{Componentes y alcance de evaluación del prototipo}
   \label{tab:clasificacion-mvp}
   \small
   \setlength{\tabcolsep}{4pt}
@@ -750,10 +756,11 @@ Para evitar ambigüedad entre componentes implementados, simulados y proyectados
     \toprule
     \textbf{Clasificación} & \textbf{Componentes considerados} \\
     \midrule
-    Funcional en el MVP & API backend para proyectos, inspecciones, resultados y reportes; persistencia en base de datos; flujo de almacenamiento de evidencias; visor web conectado a datos; análisis simplificado de vulnerabilidad; generación de reporte técnico. \\
-    Simulado o controlado & Datos de entrada preparados, evidencias visuales seleccionadas, hallazgos estructurados y resultados de análisis usados para reproducir un caso de prueba verificable. \\
-    Experimental & Rutinas asociadas a COLMAP, 3D Gaussian Splatting, inferencia con YOLO no entrenado específicamente y métricas geométricas avanzadas. \\
-    Trabajo futuro & Aplicación móvil completa, captura LiDAR real, entrenamiento propio de modelos de inteligencia artificial, validación con usuarios externos y despliegue en producción. \\
+    Datos de campo & Protocolo de captura en viviendas reales; fotografías y videos; selección y preprocesamiento; metadatos; anotaciones con revisión técnica y particiones por vivienda. \\
+    Núcleo tecnológico & Reconstrucción mediante 3D Gaussian Splatting; identificación de deficiencias mediante inteligencia artificial y asociación de detecciones con la representación tridimensional. \\
+    Servicios de soporte & API para proyectos e inspecciones; persistencia y almacenamiento de evidencias; visor web y generación de reportes con hallazgos trazables. \\
+    Evaluación & Datos de referencia; pruebas de integración; métricas de reconstrucción, detección, localización y tiempo de procesamiento; configuración y procedimiento reproducibles. \\
+    Fuera del alcance & Captura LiDAR, aplicación móvil completa y despliegue en producción. \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -831,23 +838,29 @@ Redacta una conclusión global directamente vinculada con el objetivo general de
 \subsection{Conclusiones específicas}
 
 \subsubsection{Objetivo específico 1}
-Redacta la conclusión correspondiente al primer objetivo específico.
+Redactar la conclusión sobre las deficiencias seleccionadas, los requisitos de información y los criterios de evaluación definidos, sustentándola en los resultados del primer objetivo.
 
 \subsubsection{Objetivo específico 2}
-Redacta la conclusión correspondiente al segundo objetivo específico.
+Redactar la conclusión sobre la construcción y calidad del conjunto de datos capturado en viviendas reales, indicando su composición, preparación, anotación y limitaciones.
 
 \subsubsection{Objetivo específico 3}
-Redacta la conclusión correspondiente al tercer objetivo específico.
+Redactar la conclusión sobre el procedimiento de reconstrucción tridimensional implementado y su capacidad para representar y localizar los elementos de interés.
+
+\subsubsection{Objetivo específico 4}
+Redactar la conclusión sobre la integración del modelo de inteligencia artificial y la asociación de las detecciones con la representación tridimensional, a partir de evidencias verificables.
+
+\subsubsection{Objetivo específico 5}
+Redactar la conclusión sobre el desempeño medido del prototipo, relacionando las métricas obtenidas con los datos de referencia, los criterios de evaluación y las condiciones de las pruebas.
 
 \subsection{Limitaciones}
-El MVP presenta limitaciones propias de un prototipo académico. En primer lugar, el caso de prueba se ejecuta con datos controlados, por lo que no representa la diversidad completa de viviendas autoconstruidas existentes en el Perú. En segundo lugar, el análisis de vulnerabilidad corresponde a una aproximación simplificada y trazable, orientada a demostrar el flujo técnico del sistema, mas no a emitir un dictamen estructural oficial. En tercer lugar, las detecciones automáticas y reconstrucciones 3D avanzadas no constituyen el núcleo validado del MVP, sino componentes experimentales cuya integración completa requiere mayor disponibilidad de datos, calibración y validación técnica especializada.\par
+La discusión de las limitaciones deberá sustentarse en la captura y la evaluación efectivamente realizadas. Se documentarán el número y la diversidad de viviendas, la distribución de las categorías de deficiencias, la calidad de las anotaciones, las condiciones de captura y los recursos computacionales utilizados. También se identificarán los casos en que la reconstrucción, la detección o la asociación espacial de hallazgos no satisfagan los criterios establecidos.\par
 
-Por estas razones, los resultados del prototipo deben interpretarse como evidencia de factibilidad técnica del flujo digital propuesto: registro de inspección, almacenamiento de evidencias, visualización, análisis preliminar y generación de reporte. La aplicación práctica en contextos reales requerirá validación adicional con profesionales de ingeniería civil, casos de campo y criterios normativos más exhaustivos.\par
+Las conclusiones se limitarán a las categorías, viviendas y condiciones evaluadas. La verificación de los servicios de software y la ejecución de un caso de integración no sustituirán la evaluación del desempeño de la reconstrucción tridimensional y la inteligencia artificial. Los hallazgos del prototipo se interpretarán como apoyo a una evaluación preliminar y no como un dictamen estructural definitivo.\par
 
 \subsection{Recomendaciones y trabajos futuros}
-Como trabajo futuro se recomienda ampliar el prototipo hacia una aplicación móvil completa para captura guiada de evidencias en campo, integrar sensores LiDAR o mecanismos de fotogrametría calibrada, validar reconstrucciones 3D mediante COLMAP o 3D Gaussian Splatting, y entrenar modelos de inteligencia artificial con un dataset propio de patologías estructurales en viviendas autoconstruidas peruanas. También se recomienda incorporar criterios normativos más detallados, realizar validaciones con inspectores municipales o ingenieros civiles, desplegar el sistema en un entorno productivo controlado y evaluar su usabilidad mediante instrumentos formales.\par
+Las recomendaciones finales se formularán a partir de los resultados y las limitaciones observadas. Como posibles ampliaciones fuera del alcance actual se consideran una aplicación móvil completa para captura guiada, la incorporación de sensores LiDAR, la evaluación en nuevas localidades y categorías de deficiencias, los estudios de usabilidad con usuarios finales y el despliegue en producción. Su pertinencia y prioridad deberán justificarse con la evidencia obtenida.\par
 
-Estas ampliaciones permitirían pasar de un MVP demostrativo a una plataforma de apoyo técnico más robusta, manteniendo la premisa central de la investigación: facilitar evaluaciones preliminares, trazables y accesibles sin sustituir la responsabilidad profesional del especialista estructural.\par
+La captura de datos reales, la reconstrucción mediante 3D Gaussian Splatting, la integración de inteligencia artificial y la evaluación de su desempeño forman parte de los objetivos de esta investigación y no se trasladan a trabajos futuros.\par
 
 % Se conservan las dos referencias existentes durante la migración a BibTeX.
 % Las demás citas manuales requieren verificar e incorporar su fuente completa.
@@ -865,7 +878,7 @@ Incluye encuestas, guías de entrevista, fichas de observación u otros instrume
 
 \chapter{Caso de prueba mínimo reproducible}
 
-El caso de prueba mínimo reproducible se define como una inspección controlada de una vivienda autoconstruida, construida a partir de datos preparados y evidencias verificables. Su finalidad es demostrar el funcionamiento integrado del MVP sin depender de captura real en campo, entrenamiento de modelos de inteligencia artificial, reconstrucción 3D completa ni sensores LiDAR. Bajo este enfoque, el caso permite validar el flujo técnico principal del sistema: registro de información, persistencia, almacenamiento de evidencias, visualización, análisis preliminar y generación de reporte.\par
+Este caso de prueba mínimo reproducible constituye una prueba auxiliar de integración de los servicios de software. Utiliza datos preparados y hallazgos controlados para verificar el registro, la persistencia, el almacenamiento, la visualización y la generación de reportes. Su ejecución no sustituye la captura de datos reales ni acredita el cumplimiento de los objetivos de reconstrucción tridimensional, identificación mediante inteligencia artificial y evaluación del desempeño. Estos objetivos requieren pruebas adicionales con datos de campo, referencias documentadas y métricas definidas previamente.\par
 
 La entrada del caso estará compuesta por un proyecto de prueba, una inspección asociada, evidencias visuales controladas y un conjunto de hallazgos definidos en formato estructurado. El flujo esperado comprende la creación del proyecto, el registro de la inspección, la asociación de evidencias, la ejecución del análisis simplificado, la consulta de resultados, la apertura del visor y la generación del reporte técnico. El caso se considerará aceptado cuando el sistema produzca salidas consistentes y reproducibles: registros persistidos, evidencias asociadas, resultado preliminar trazable, visor con datos del caso y reporte generado desde la información de la inspección.\par
 
