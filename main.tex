@@ -147,11 +147,11 @@ En el contexto de la informalidad constructiva, la verificación estructural de 
 
 Frente a ello, en los últimos años se ha extendido el uso de técnicas de análisis no destructivo (NDT, por sus siglas en inglés) que permiten estimar la calidad y estabilidad de las edificaciones sin necesidad de intervenir físicamente en la estructura. Entre las más comunes se encuentran la termografía infrarroja, el escaneo láser 3D, el ultrasonido de concreto y la fotogrametría digital (Gao et al., 2023). Estas herramientas ofrecen ventajas al proporcionar modelos tridimensionales del inmueble y detectar deformaciones o irregularidades geométricas. Sin embargo, su aplicación en el contexto peruano sigue siendo limitada por el alto costo del equipamiento, la complejidad del procesamiento de datos y la falta de personal técnico capacitado para interpretar los resultados (Flores \& Urure, 2024).\par
 
-En este escenario emerge el potencial de las técnicas de reconstrucción 3D basadas en inteligencia artificial, particularmente el método conocido como 3D Gaussian Splatting (3DGS). Esta tecnología, derivada de los avances en neural rendering y Neural Radiance Fields (NeRF), permite reconstruir escenas tridimensionales a partir de fotografías o videos comunes, con alta fidelidad visual y en tiempo real \citep{kerbl2023}. A diferencia de los métodos tradicionales de fotogrametría, 3DGS no requiere calibraciones complejas ni cámaras profesionales; puede funcionar con imágenes obtenidas por un teléfono móvil, lo que reduce significativamente los costos de adquisición y tiempo de procesamiento. Estudios recientes muestran su eficacia en ámbitos como reconstrucción arquitectónica, ingeniería civil y agricultura de precisión, con métricas de precisión superiores al 90\% en la detección de errores geométricos (Li et al., 2024).\par
+En este escenario emerge el potencial de 3D Gaussian Splatting (3DGS) para representar escenas capturadas mediante imágenes y visualizar nuevas vistas con alta calidad y renderizado en tiempo real \citep{kerbl2023}. Esta propiedad del renderizado no implica que la reconstrucción ni la preparación de los datos se ejecuten en tiempo real. El procedimiento considera la estimación de parámetros de cámara y una representación inicial de la escena. Para las capturas previstas con dron e iPhone se documentarán por separado los dispositivos, las lentes, la resolución y los parámetros disponibles; el procesamiento deberá considerar las características de cada cámara \citep{colmaptutorial}.\par
 
-Pese a sus ventajas, el principal desafío actual radica en interpretar automáticamente los modelos 3D generados para detectar deficiencias estructurales. En este punto, la incorporación de modelos de aprendizaje profundo (Deep Learning) permite analizar la geometría y textura de las superficies reconstruidas para predecir posibles errores en la distribución de cargas, fisuras o deformaciones estructurales. Estos modelos han demostrado su capacidad para reconocer patrones complejos a partir de datos espaciales tridimensionales, constituyéndose en una herramienta valiosa para la automatización de la inspección técnica (Zhang et al., 2024).\par
+En la solución propuesta, el análisis mediante inteligencia artificial se aplicará a fotografías y fotogramas para identificar las categorías de deficiencias observables seleccionadas. Las detecciones se asociarán posteriormente con la representación tridimensional mediante un procedimiento de correspondencia espacial cuya exactitud deberá evaluarse. Esta secuencia distingue la identificación en imágenes de la localización de hallazgos en 3D y permite conservar la evidencia visual que sustenta cada resultado.\par
 
-De esta manera, la presente investigación propone el desarrollo de un prototipo basado en 3D Gaussian Splatting y modelos de inteligencia artificial capaz de generar un modelo tridimensional de una vivienda a partir de fotografías y analizarlo automáticamente para identificar riesgos estructurales derivados de la autoconstrucción. El sistema buscará ofrecer una alternativa digital accesible para ingenieros municipales, fiscalizadores y ciudadanos, que facilite una evaluación preliminar no destructiva de las edificaciones, promoviendo la construcción segura y la toma de decisiones informadas. En un país de alta sismicidad como el Perú, donde más del 70\% de las viviendas son autoconstruidas, la aplicación de tecnologías emergentes como la reconstrucción 3D neuronal y la IA representa una oportunidad concreta para reducir la vulnerabilidad urbana y democratizar el acceso a la asistencia técnica constructiva.\par
+La investigación propone un prototipo que utilice capturas exteriores mediante dron e interiores mediante iPhone para construir representaciones tridimensionales y localizar deficiencias observables identificadas mediante inteligencia artificial. El sistema buscará apoyar la revisión preliminar de las viviendas mediante evidencias trazables, visualización y reportes. Su evaluación se centrará en el desempeño de la reconstrucción, la identificación y la localización de hallazgos, sin atribuir a las imágenes por sí solas la capacidad de determinar la distribución de cargas o la seguridad estructural integral de una vivienda.\par
 
 
 \section{Definición del problema}
@@ -163,12 +163,13 @@ La investigación aborda la integración de datos visuales obtenidos en vivienda
 \subsection{Problemas específicos}
 \begin{enumerate}
   \item ¿Qué deficiencias constructivas observables, requisitos de información y criterios de evaluación deben considerarse para orientar el desarrollo del prototipo?
-  \item ¿Cómo obtener y preparar un conjunto de datos visuales de viviendas autoconstruidas reales que permita desarrollar y evaluar la reconstrucción tridimensional y la identificación de deficiencias constructivas?
+  \item ¿Cómo obtener y preparar un conjunto de datos visuales mediante captura exterior con dron e interior con iPhone en viviendas autoconstruidas reales, para desarrollar y evaluar la reconstrucción tridimensional y la identificación de deficiencias constructivas?
   \item ¿Cómo reconstruir tridimensionalmente las viviendas mediante 3D Gaussian Splatting, a partir de los datos visuales preparados, para visualizar y localizar los elementos de interés?
-  \item ¿Cómo identificar las deficiencias constructivas seleccionadas mediante inteligencia artificial y asociar sus detecciones con la representación tridimensional de la vivienda?
+  \item ¿Cómo identificar las deficiencias constructivas seleccionadas en fotografías y fotogramas mediante inteligencia artificial y asociar sus detecciones con la representación tridimensional de la vivienda?
   \item ¿Qué desempeño presenta el prototipo en términos de calidad de reconstrucción, detección y localización de deficiencias constructivas y tiempo de procesamiento, respecto de los datos de referencia y criterios de evaluación definidos?
 \end{enumerate}
 
+\clearpage
 \section{Objetivos}
 
 \subsection{Objetivo general}
@@ -177,9 +178,9 @@ Desarrollar y evaluar un prototipo tecnológico que integre reconstrucción trid
 \subsection{Objetivos específicos}
 \begin{enumerate}
   \item Definir las deficiencias constructivas observables, los requisitos de información y los criterios de evaluación del prototipo, mediante revisión documental y criterios técnicos sustentados.
-  \item Construir un conjunto de datos visuales de viviendas autoconstruidas reales mediante un protocolo de captura de fotografías y videos, selección de imágenes, extracción de fotogramas, preprocesamiento y anotación, para su utilización en el desarrollo y la evaluación de la reconstrucción tridimensional y la identificación de deficiencias constructivas.
+  \item Construir un conjunto de datos visuales de viviendas autoconstruidas reales mediante captura exterior con dron e interior con iPhone, aplicando protocolos de adquisición, selección, preprocesamiento y anotación de fotografías y fotogramas, para desarrollar y evaluar la reconstrucción tridimensional y la identificación de deficiencias constructivas.
   \item Implementar un procedimiento de reconstrucción tridimensional mediante 3D Gaussian Splatting, a partir de los datos visuales preparados, que permita visualizar y localizar los elementos de interés de las viviendas autoconstruidas.
-  \item Integrar un modelo de inteligencia artificial para identificar las deficiencias constructivas seleccionadas y asociar sus detecciones con la representación tridimensional de la vivienda dentro del prototipo.
+  \item Integrar un modelo de inteligencia artificial para identificar las deficiencias constructivas seleccionadas en fotografías y fotogramas y asociar sus detecciones con la representación tridimensional de la vivienda dentro del prototipo.
   \item Evaluar el desempeño del prototipo en términos de calidad de reconstrucción, detección y localización de deficiencias constructivas y tiempo de procesamiento, mediante datos de referencia, métricas y criterios de evaluación definidos previamente y un protocolo reproducible.
 \end{enumerate}
 
@@ -188,21 +189,25 @@ En el Perú, la autoconstrucción representa una práctica extendida y culturalm
 
 Frente a esta realidad, el fortalecimiento de los mecanismos de evaluación técnica resulta esencial para reducir la vulnerabilidad estructural de millones de viviendas. No obstante, la supervisión presencial por parte de ingenieros o fiscalizadores resulta limitada debido a la escasez de personal técnico, la dispersión geográfica y los costos asociados. En este contexto, la incorporación de herramientas digitales y modelos de inteligencia artificial se presenta como una alternativa viable y sostenible para apoyar los procesos de inspección y diagnóstico estructural.\par
 
-La computación gráfica y las técnicas de reconstrucción 3D, como el 3D Gaussian Splatting (3DGS), permiten generar modelos tridimensionales de edificaciones a partir de imágenes o vídeos, con alta fidelidad geométrica y bajo costo. Integrar estas técnicas con sistemas de inteligencia artificial posibilita automatizar la detección de errores constructivos y evaluar de manera remota la seguridad de las viviendas autoconstruidas.\par
+La combinación de capturas exteriores con dron e interiores con iPhone permitirá reunir evidencias visuales complementarias de las viviendas seleccionadas. Su integración con reconstrucción tridimensional e inteligencia artificial se orientará a identificar y localizar deficiencias observables para apoyar la revisión técnica. La calidad geométrica, el desempeño de detección y los recursos de procesamiento se evaluarán mediante el protocolo experimental, en lugar de asumir su cumplimiento por la elección de la tecnología.\par
 
 Este estudio busca contribuir al desarrollo de un sistema digital que combine reconstrucción 3D y aprendizaje automático para mejorar la gestión técnica de la autoconstrucción, aportando así a la seguridad habitacional y a la reducción del riesgo estructural en el país. Además, constituye una base metodológica para futuras investigaciones en el campo de la ingeniería civil asistida por inteligencia artificial y la modernización de los mecanismos de fiscalización urbana.\par
 
 \section{Importancia}
 La autoconstrucción constituye uno de los principales mecanismos de acceso a la vivienda en el Perú, pero también una de las causas más críticas de vulnerabilidad estructural. Según el Ministerio de Vivienda, Construcción y Saneamiento (MVCS, 2023), más del 70\% de las viviendas en el país se levantan sin asistencia técnica profesional, lo que incrementa significativamente el riesgo de colapso durante eventos sísmicos o climáticos.\par
 
-Contar con un sistema digital capaz de analizar de forma automatizada las condiciones estructurales de viviendas autoconstruidas —a partir de modelos tridimensionales generados por imágenes o videos— permitiría reducir el margen de error humano, mejorar la fiscalización técnica y optimizar el proceso de detección temprana de deficiencias constructivas.\par
+Contar con un sistema digital que organice capturas exteriores e interiores, identifique deficiencias observables en las imágenes y permita consultar su localización en una representación tridimensional aportaría un flujo trazable para la revisión técnica. La contribución de la investigación se evaluará a partir de los resultados del prototipo y de las condiciones de los casos estudiados.\par
 
 La implementación de herramientas de reconstrucción 3D e inteligencia artificial no solo representa un aporte tecnológico al campo de la ingeniería civil, sino que también constituye una estrategia de inclusión social al facilitar el acceso a evaluaciones técnicas precisas, incluso en zonas donde no se dispone de especialistas. En este sentido, la investigación busca contribuir al fortalecimiento de la seguridad habitacional, la sostenibilidad urbana y la modernización de la gestión pública en materia de vivienda.\par
 
 \section{Alcance del prototipo}
 El alcance de la presente investigación comprende el desarrollo y la evaluación del prototipo SE-PEAV, desde la captura de datos visuales en viviendas autoconstruidas reales hasta la reconstrucción tridimensional, la identificación de deficiencias constructivas mediante inteligencia artificial y la presentación de hallazgos localizados. La reconstrucción mediante 3D Gaussian Splatting y la integración del modelo de inteligencia artificial constituyen componentes centrales que deberán implementarse y evaluarse. El prototipo apoyará la evaluación preliminar de las deficiencias observables seleccionadas; no sustituirá el juicio profesional de un ingeniero civil ni constituirá un dictamen estructural oficial.\par
 
-La construcción del conjunto de datos incluirá un protocolo de captura, criterios de calidad y cobertura visual, selección de fotografías o fotogramas, preprocesamiento, organización de metadatos y anotación de las deficiencias seleccionadas. Las anotaciones deberán contar con criterios documentados y revisión técnica. La separación de los datos destinados al ajuste del modelo, cuando corresponda, y a su evaluación se realizará por vivienda, evitando que registros de una misma vivienda se utilicen en ambos grupos. El tamaño y la composición del conjunto de datos se documentarán a partir de la captura realizada.\par
+La adquisición prevista comprende fotografías y videos del exterior mediante dron y del interior mediante iPhone. Cada sesión se identificará por vivienda, zona, dispositivo y fecha. Se establecerán protocolos diferenciados de recorrido, cobertura, calidad visual y organización de archivos. El alcance considera imágenes RGB; la captura de profundidad o LiDAR no forma parte del procedimiento previsto. El modelo del dron y del iPhone, la aplicación de captura y los parámetros de adquisición se documentarán antes de la recolección, sin fijar una resolución o telemetría que aún no se haya verificado.\par
+
+La preparación incluirá selección de imágenes, extracción de fotogramas cuando corresponda, preprocesamiento, organización de metadatos y anotación de las deficiencias seleccionadas. Las anotaciones deberán contar con criterios documentados y revisión técnica. Las particiones destinadas al entrenamiento o ajuste, la validación y la prueba del modelo de detección se separarán por vivienda, conservando juntos los registros exteriores e interiores de cada inmueble. La evaluación de nuevas vistas de una reconstrucción utilizará imágenes reservadas de esa escena y se distinguirá de la evaluación de la capacidad del detector para generalizar a viviendas no utilizadas en su ajuste. El tamaño y la composición de los conjuntos se documentarán a partir de la captura realizada.\par
+
+Los registros exteriores e interiores se vincularán a una misma vivienda y conservarán la identificación de sus reconstrucciones y sistemas de coordenadas. La decisión de presentar modelos separados o una representación unificada se resolverá mediante pruebas de correspondencia y alineación. La integración geométrica, cuando sea viable, requerirá documentar la transformación entre modelos, la referencia de escala y el error de alineación; no se asumirá una fusión automática por reunir los archivos de ambas capturas.\par
 
 El prototipo integrará servicios de registro y almacenamiento, reconstrucción tridimensional, inferencia mediante inteligencia artificial, asociación de detecciones con la representación tridimensional, visualización y generación de reportes. La selección, adaptación o ajuste del modelo se sustentará en las categorías de deficiencias y los datos disponibles; no se establece como requisito entrenar un modelo desde cero. La evaluación empleará datos de referencia y métricas definidas antes de interpretar los resultados. La captura LiDAR, una aplicación móvil completa y el despliegue en producción quedan fuera del alcance de esta investigación.\par
 
@@ -215,7 +220,7 @@ El estudio se enfocará en viviendas autoconstruidas de zonas urbanas y periurba
 El prototipo estará orientado principalmente a fiscalizadores municipales, maestros de obra y estudiantes de ingeniería civil, quienes podrán utilizarlo como herramienta de verificación rápida y apoyo en la supervisión de edificaciones.
 
 \subsection{Limitación técnica}
-La evaluación se realizará con registros visuales capturados en viviendas reales y datos de referencia documentados. Su alcance estará delimitado por las viviendas seleccionadas, las categorías de deficiencias anotadas, las condiciones de captura y los recursos de procesamiento disponibles. Se documentarán estas condiciones para interpretar los resultados y establecer los límites de su generalización.\par
+La evaluación se realizará con registros visuales capturados en viviendas reales y datos de referencia documentados. Se distinguirán las condiciones de captura exterior con dron e interior con iPhone, incluyendo visibilidad de los elementos, iluminación, cobertura, oclusiones y calidad de imagen. Se registrarán las zonas no observadas y los hallazgos cuya localización tridimensional no pueda establecerse de manera verificable. Los resultados estarán delimitados por estas condiciones, las categorías anotadas y los recursos de procesamiento disponibles.\par
 
 La evaluación distinguirá la calidad visual de la reconstrucción, su precisión geométrica cuando se disponga de medidas de referencia y el desempeño en detección y localización de las deficiencias seleccionadas. Las métricas de apariencia visual no se utilizarán por sí solas como evidencia de exactitud dimensional. El cumplimiento de los objetivos se sustentará en resultados medidos, sin inferir una reducción del riesgo estructural a escala nacional a partir del funcionamiento del prototipo.\par
 
@@ -560,9 +565,9 @@ En esta sección se tiene como punto el objetivo y la mejor metodología a selec
     & Enfoque en normativa local & ¿Aplica fórmulas simplificadas o normativas específicas para albañilería? \\
     & Integración de datos (input) & ¿Permite la entrada de datos mediante imágenes o requiere medidas manuales? \\
     \midrule
-    \textbf{II. Tecnológico (Reconstrucción 3D)} & Velocidad de procesamiento & ¿Permite la reconstrucción en tiempo real o en un tiempo aceptable para un dispositivo móvil? \\
-    & Precisión y escalabilidad & ¿Se puede medir la geometría de la estructura con fines de predimensionamiento? \\
-    & Requerimientos de hardware & ¿Puede ejecutarse en un dispositivo móvil estándar? \\
+    \textbf{II. Tecnológico (Reconstrucción 3D)} & Tiempo de procesamiento & ¿Qué tiempo requieren la reconstrucción y el análisis en el equipo de procesamiento documentado? \\
+    & Calidad y localización & ¿Con qué calidad se representan los elementos y con qué exactitud se localizan los hallazgos frente a las referencias? \\
+    & Requerimientos de hardware & ¿Qué recursos de CPU, GPU y memoria requiere el procesamiento, separado de la captura con dron e iPhone? \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -607,7 +612,7 @@ Esta es la sección se realizo la comparativa mediante el cua se justifica la el
     Representación & Malla (\textit{mesh}) o nube de puntos & Implícita (volumétrica/vóxeles) & Explícita (basada en puntos gaussianos 3D) \\
     Velocidad de entrenamiento & Media/alta (depende del tamaño) & Lenta y costosa (requiere optimización de red neuronal). & Muy rápida (más rápido que NeRF). \\
     Velocidad de \textit{rendering} & Rápida (basada en GPU) & Lenta (requiere consultar la red para cada rayo). & Tiempo real / interactivo (ideal para aplicaciones móviles y VR/AR). \\
-    Requerimientos de cómputo & Alto (requiere un buen GPU/CPU para generar la malla). & Muy alto (intenso en GPU/redes neuronales). & Bajo a medio (mayor eficiencia, permite mejor rendimiento en hardware limitado como un móvil). \\
+    Requerimientos de cómputo & Dependen de las imágenes, la resolución y el método de reconstrucción. & Dependen del modelo, el entrenamiento y la resolución de consulta. & Se evaluarán para la optimización de la escena y el renderizado por separado; no se presupone ejecución en el dispositivo de captura. \\
     Precisión de profundidad & Alta (escalable, puede medir volúmenes). & Baja (a menudo genera profundidades imprecisas). & Media a alta (mejor que NeRF, pero la escalabilidad requiere pasos adicionales en la implementación). \\
     Calidad visual & Muy alta (texturas fotorrealistas). & Alta (excelente manejo de reflejos y luces). & Alta / superior (generalmente más nítido y con menos artefactos que NeRF). \\
     \bottomrule
@@ -756,7 +761,7 @@ El alcance funcional del prototipo SE-PEAV se organiza según los componentes ne
     \toprule
     \textbf{Clasificación} & \textbf{Componentes considerados} \\
     \midrule
-    Datos de campo & Protocolo de captura en viviendas reales; fotografías y videos; selección y preprocesamiento; metadatos; anotaciones con revisión técnica y particiones por vivienda. \\
+    Datos de campo & Captura exterior con dron e interior con iPhone; fotografías y videos RGB; selección y preprocesamiento; metadatos; anotaciones revisadas y particiones por vivienda. \\
     Núcleo tecnológico & Reconstrucción mediante 3D Gaussian Splatting; identificación de deficiencias mediante inteligencia artificial y asociación de detecciones con la representación tridimensional. \\
     Servicios de soporte & API para proyectos e inspecciones; persistencia y almacenamiento de evidencias; visor web y generación de reportes con hallazgos trazables. \\
     Evaluación & Datos de referencia; pruebas de integración; métricas de reconstrucción, detección, localización y tiempo de procesamiento; configuración y procedimiento reproducibles. \\
@@ -767,7 +772,7 @@ El alcance funcional del prototipo SE-PEAV se organiza según los componentes ne
 
 \section{Herramientas y entorno de desarrollo}
 
-En esta sección se describen las tecnologías, frameworks, lenguajes de programación y herramientas seleccionadas para la construcción de los diferentes módulos del sistema SE-PEAV (Sistema Edge de Predimensionamiento Estructural y Análisis de Vulnerabilidad).
+En esta sección se describen las tecnologías y herramientas del prototipo SE-PEAV. Los dispositivos de adquisición se distinguen del entorno de cómputo: el dron y el iPhone capturarán los registros visuales, mientras que la reconstrucción y la inferencia se ejecutarán en el equipo de procesamiento o servidor documentado para los experimentos. No se establece como requisito ejecutar estos procesos en el teléfono o en el dron.
 
 \subsection{Desarrollo del backend}
 El backend del sistema se implementó utilizando el lenguaje de programación \textbf{Python 3.12}, seleccionado por su madurez y amplio ecosistema para el desarrollo de inteligencia artificial y procesamiento tridimensional. Las principales herramientas y bibliotecas utilizadas son:
@@ -786,34 +791,42 @@ Para garantizar la portabilidad y escalabilidad de la solución en entornos loca
     \item \textbf{MinIO / Amazon S3:} Servidor de almacenamiento de objetos local compatible con la API de AWS S3, utilizado para resguardar los videos capturados, frames extraídos, nubes de puntos PLY y reportes técnicos en formato PDF.
 \end{itemize}
 
-\subsection{Desarrollo móvil y de presentación visual}
-La interfaz del usuario se divide en dos entornos diferenciados según el rol operativo:
+\subsection{Dispositivos de captura y presentación visual}
+El flujo previsto comprende dos fuentes de adquisición y un entorno de consulta:
 \begin{itemize}
-    \item \textbf{Aplicación Móvil (Flutter \& Riverpod):} Construida con el SDK de Flutter (Dart) para permitir el registro de proyectos en campo, la autenticación mediante JWT de los inspectores, y la captura asistida de video con telemetría. Utiliza Riverpod para la gestión del estado global de la aplicación y Dio como cliente HTTP.
-    \item \textbf{Visor Web Interactivo 3D (Three.js):} Desarrollado con HTML5, CSS3 vanilla y la biblioteca gráfica \textbf{Three.js} basada en WebGL. Este visor permite visualizar la nube de puntos densa del edificio y proyectar interactivamente las patologías estructurales detectadas por la inteligencia artificial sobre un modelo digital tridimensional.
+    \item \textbf{Captura exterior con dron:} Registro de las fachadas y demás superficies exteriores visibles incluidas en el recorrido de adquisición. Se documentarán el equipo, la cámara, los parámetros de captura y las zonas cubiertas o no observadas.
+    \item \textbf{Captura interior con iPhone:} Registro de los ambientes y elementos interiores seleccionados mediante fotografías y videos RGB. Se documentarán el modelo del teléfono, la lente y la aplicación utilizada. El procedimiento no requiere desarrollar una aplicación móvil propia ni presupone disponer de profundidad o telemetría.
+    \item \textbf{Visor web:} Presentación de las representaciones tridimensionales y los hallazgos asociados, con acceso a la imagen de origen y a su identificación como captura exterior o interior. Se verificará la compatibilidad del visor basado en Three.js con el formato de representación utilizado; la visualización de una nube de puntos no se considerará por sí sola equivalente al renderizado de gaussianas.
 \end{itemize}
 
 \section{Arquitectura de la solución}
 
 La arquitectura del sistema SE-PEAV se basa en un diseño modular por capas que separa las responsabilidades de captura de datos, ingestión, procesamiento por lotes en segundo plano, análisis inferencial e interfaces de presentación.
 
-\subsection{Flujo de ingesta de datos (patrón de almacenamiento directo)}
-El flujo de ingesta de datos de campo asegura que los archivos pesados (como videos 4K capturados por drones o dispositivos móviles) se carguen de manera eficiente y segura:
+\subsection{Transferencia, organización e ingesta de datos}
+El flujo de carga se define independientemente del dispositivo utilizado para capturar las imágenes. Los archivos podrán transferirse previamente a una computadora o cargarse desde un cliente compatible. La conexión directa del dron o del iPhone con la API no se considera un requisito. La ruta de transferencia efectivamente utilizada se documentará en cada sesión:
 \begin{enumerate}
-    \item El dispositivo móvil o la estación de control del dron solicita un punto de carga a la API de FastAPI a través del endpoint respectivo.
-    \item La API genera y retorna una ruta de subida directa o un canal optimizado para la transferencia del archivo.
-    \item El cliente realiza la carga del video o las imágenes directamente hacia el almacenamiento de objetos de MinIO/S3.
-    \item Al finalizar la transferencia, el backend registra la metadata del archivo en la base de datos relacional y añade una tarea a la cola de procesamiento de Celery.
+    \item Identificar la vivienda y las sesiones exterior e interior; organizar los archivos originales y conservar sus metadatos disponibles.
+    \item Registrar la inspección y solicitar desde el cliente de carga un destino de almacenamiento autorizado por la API.
+    \item Transferir las fotografías o videos al almacenamiento de objetos, verificar su integridad y registrar el dispositivo, la sesión, la zona y los parámetros de adquisición disponibles.
+    \item Extraer fotogramas cuando corresponda y aplicar la selección y el preprocesamiento documentados, manteniendo la relación entre cada imagen derivada y su archivo original.
+    \item Registrar los datos preparados y programar las tareas de reconstrucción e inferencia en el entorno de procesamiento.
 \end{enumerate}
 
 \subsection{Diagrama de componentes e interacción}
 El pipeline de procesamiento se divide en cuatro capas operativas esenciales:
 \begin{itemize}
-    \item \textbf{Capa de Ingesta (Ingest Layer):} Encargada de recibir los videos e imágenes de campo. Ejecuta la extracción controlada de fotogramas a una tasa de muestreo adaptativa (fps) mediante OpenCV.
-    \item \textbf{Motor Geométrico (Geometry Layer):} Invoca rutinas de Structure from Motion (SfM) con COLMAP para determinar las orientaciones de cámara y generar la nube de puntos dispersa, que posteriormente sirve como base para el entrenamiento de elipsoides con 3D Gaussian Splatting (3DGS).
-    \item \textbf{Capa de Ingesta y Análisis (Analysis Layer):} Ejecuta de forma paralela la inferencia con modelos YOLOv8 para segmentar grietas y fallas estructurales superficiales, y calcula métricas de vulnerabilidad basadas en la norma técnica peruana de albañilería confinada \textbf{E.060} (verificando el espesor de muros portantes y distanciamiento de columnas).
-    \item \textbf{Capa de Reportes (Reporting Layer):} Consolida las vulnerabilidades, calcula el score de riesgo acumulado (Bajo, Medio, Alto, Crítico) y compila un reporte en formato PDF/HTML mediante WeasyPrint, enlazándolo con el visor interactivo Three.js.
+    \item \textbf{Capa de ingesta:} Recibirá fotografías y videos de las sesiones exteriores e interiores. Aplicará extracción de fotogramas, selección y control de calidad con parámetros documentados, conservando los originales y la trazabilidad de cada transformación.
+    \item \textbf{Motor de reconstrucción:} Empleará Structure from Motion (SfM) con COLMAP para estimar parámetros y poses de cámara y obtener una representación inicial, seguida de la optimización de la escena mediante 3D Gaussian Splatting. Las imágenes del dron y del iPhone se identificarán por cámara y configuración. Las reconstrucciones conservarán su sistema de coordenadas; su eventual unificación requerirá un procedimiento de alineación evaluado.
+    \item \textbf{Capa de análisis y localización:} Aplicará el modelo de detección o segmentación seleccionado, considerando YOLOv8 como candidato, a fotografías y fotogramas. La versión, las categorías, los pesos y el eventual ajuste se documentarán. Un módulo de correspondencia utilizará las poses de cámara y la geometría disponible para asociar detecciones con la representación 3D; registrará las asociaciones verificables y los casos no localizables. Los criterios técnicos distinguirán la norma E.060, Concreto Armado, de la E.070, Albañilería, según el elemento analizado \citep{rneportal}. No se declarará la verificación de espesores, distancias o cumplimiento normativo sin las medidas de referencia y el procedimiento correspondiente.
+    \item \textbf{Capa de reportes:} Reunirá los hallazgos, las imágenes de origen, la localización disponible y las limitaciones observadas en un reporte enlazado con el visor. Cualquier clasificación preliminar de vulnerabilidad requerirá criterios y validación documentados; no se asumirá que una detección visual equivale a un diagnóstico de riesgo estructural.
 \end{itemize}
+
+\subsection{Correspondencia entre exterior e interior}
+El identificador de vivienda relacionará ambas capturas desde la adquisición hasta el reporte. Antes de elegir una reconstrucción conjunta o modelos separados se evaluará la disponibilidad de correspondencias y referencias comunes. El procedimiento elegido deberá documentar cómo se relacionan las coordenadas, cómo se establece la escala cuando se realicen mediciones y con qué error se alinean los modelos. Si no se demuestra una alineación suficiente, el visor presentará las reconstrucciones identificadas por zona, sin sugerir continuidad geométrica verificada.
+
+\subsection{Evaluación diferenciada del flujo}
+El protocolo distinguirá la calidad de reconstrucción exterior e interior, el desempeño del detector en imágenes y la exactitud de la localización tridimensional. Los tiempos de transferencia, preparación, reconstrucción, inferencia y generación de reportes se registrarán por separado. Las anotaciones de referencia y las comprobaciones de localización permitirán evaluar cada etapa sin atribuir al detector errores que provengan de la reconstrucción o de la asociación espacial.
 
 \section{Implementación de servicios backend}
 
@@ -841,7 +854,7 @@ Redacta una conclusión global directamente vinculada con el objetivo general de
 Redactar la conclusión sobre las deficiencias seleccionadas, los requisitos de información y los criterios de evaluación definidos, sustentándola en los resultados del primer objetivo.
 
 \subsubsection{Objetivo específico 2}
-Redactar la conclusión sobre la construcción y calidad del conjunto de datos capturado en viviendas reales, indicando su composición, preparación, anotación y limitaciones.
+Redactar la conclusión sobre la construcción y calidad del conjunto de datos exterior capturado con dron e interior capturado con iPhone, indicando su composición, preparación, anotación y limitaciones.
 
 \subsubsection{Objetivo específico 3}
 Redactar la conclusión sobre el procedimiento de reconstrucción tridimensional implementado y su capacidad para representar y localizar los elementos de interés.
@@ -866,7 +879,10 @@ La captura de datos reales, la reconstrucción mediante 3D Gaussian Splatting, l
 % Las demás citas manuales requieren verificar e incorporar su fuente completa.
 \nocite{kerbl2023,mildenhall2020}
 \bibliographystyle{apalike}
+\begingroup
+\raggedright
 \bibliography{referencias}
+\endgroup
 
 \appendix
 
@@ -874,7 +890,25 @@ La captura de datos reales, la reconstrucción mediante 3D Gaussian Splatting, l
 Incluye aquí la matriz de consistencia de la investigación.
 
 \chapter{Instrumentos de recolección de datos}
-Incluye encuestas, guías de entrevista, fichas de observación u otros instrumentos.
+Los instrumentos siguientes constituyen la estructura prevista para documentar la adquisición y preparación de los datos. Se completarán durante las sesiones de captura y el procesamiento; no representan registros de campo ya obtenidos.
+
+\section{Ficha de identificación de vivienda y sesiones}
+La ficha registrará el identificador de vivienda, la fecha, el responsable, los ambientes o superficies seleccionados y las condiciones de acceso. Cada sesión tendrá un código asociado a la vivienda y se clasificará como exterior con dron o interior con iPhone. Se identificarán las zonas cubiertas, las zonas no observadas y las incidencias que limiten la interpretación de las imágenes.
+
+\section{Protocolo de captura exterior con dron}
+Antes de la sesión se definirán las superficies de interés y el recorrido previsto. La ficha de captura registrará el modelo del dron y de su cámara, la modalidad de adquisición, la resolución, la lente, los parámetros disponibles y la relación entre archivos y zonas observadas. Se comprobarán cobertura, nitidez, iluminación y continuidad visual entre tomas. Las distancias, alturas y demás parámetros efectivamente utilizados se consignarán en el registro de campo, sin asumir valores no medidos.
+
+\section{Protocolo de captura interior con iPhone}
+La sesión se organizará por ambientes y elementos de interés. Se registrarán modelo del iPhone, aplicación, lente, resolución, modalidad de captura y condiciones de iluminación. El recorrido buscará conservar cobertura y continuidad visual, identificando cambios de cámara o configuración. Los registros corresponden a fotografías y videos RGB; no se considerarán datos de profundidad o LiDAR como entrada del procedimiento previsto.
+
+\section{Registro de preparación y control de calidad}
+El registro vinculará cada fotografía o fotograma con su archivo original, sesión, vivienda y zona. Para videos se documentarán el criterio de extracción y la marca temporal de los fotogramas. Se consignarán selección o descarte y su motivo, transformaciones aplicadas y versión del conjunto. Se revisarán imágenes borrosas, exposición inadecuada, oclusiones y cobertura insuficiente. La selección procurará conservar vistas útiles para la reconstrucción y evidencia suficiente para la anotación.
+
+\section{Ficha de anotación y referencia}
+Cada anotación registrará imagen de origen, categoría de deficiencia, ubicación en la imagen, autor, revisión técnica e incertidumbre. Las reglas de anotación y el tratamiento de casos ambiguos se documentarán antes de evaluar el detector. Las medidas o puntos de referencia utilizados para comprobar geometría y localización tendrán un registro del método y de las condiciones de obtención. Los hallazgos sin correspondencia 3D verificable conservarán su evidencia 2D y se identificarán como no localizados.
+
+\section{Organización y particiones de datos}
+Se elaborará un inventario por vivienda, sesión, zona, dispositivo y categoría anotada. Los registros interiores y exteriores de una misma vivienda permanecerán en una única partición para la evaluación del detector. Se documentarán por separado las imágenes de cada escena destinadas a optimizar la reconstrucción y las reservadas para evaluar nuevas vistas. Los equipos, parámetros de captura, cantidad de viviendas, distribución de categorías y criterios de aceptación se precisarán en el protocolo previo a la evaluación.
 
 \chapter{Caso de prueba mínimo reproducible}
 
