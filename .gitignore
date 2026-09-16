@@ -8,6 +8,8 @@
 *.toc
 *.fls
 *.fdb_latexmk
+*.bbl
+*.blg
 
 # Generated thesis output
 main.pdf

@@ -12,6 +12,7 @@
 \usepackage{longtable}
 \usepackage{pdflscape}
 \usepackage{csquotes}
+\usepackage[authoryear,round]{natbib}
 \usepackage{hyperref}
 \usepackage{tocbibind}
 
@@ -46,8 +47,7 @@
   {\large Tesis para optar el título profesional de \textit{Nombre del título profesional}}\\[1.2cm]
 
   {\large \textbf{Autor}}\\[0.2cm]
-  {\large Tomasto Solis, Victor Eduardo}\\[0.2cm]
-  {\large Gonzales Villalobos, Jhon}\\[0.8cm]
+  {\large Tomasto Solis, Victor Eduardo}\\[0.8cm]
 
   {\large \textbf{Asesor}}\\[0.2cm]
   {\large Canepa Perez, Carlos Alberto}\\[1.5cm]
@@ -147,7 +147,7 @@ En el contexto de la informalidad constructiva, la verificación estructural de 
 
 Frente a ello, en los últimos años se ha extendido el uso de técnicas de análisis no destructivo (NDT, por sus siglas en inglés) que permiten estimar la calidad y estabilidad de las edificaciones sin necesidad de intervenir físicamente en la estructura. Entre las más comunes se encuentran la termografía infrarroja, el escaneo láser 3D, el ultrasonido de concreto y la fotogrametría digital (Gao et al., 2023). Estas herramientas ofrecen ventajas al proporcionar modelos tridimensionales del inmueble y detectar deformaciones o irregularidades geométricas. Sin embargo, su aplicación en el contexto peruano sigue siendo limitada por el alto costo del equipamiento, la complejidad del procesamiento de datos y la falta de personal técnico capacitado para interpretar los resultados (Flores \& Urure, 2024).\par
 
-En este escenario emerge el potencial de las técnicas de reconstrucción 3D basadas en inteligencia artificial, particularmente el método conocido como 3D Gaussian Splatting (3DGS). Esta tecnología, derivada de los avances en neural rendering y Neural Radiance Fields (NeRF), permite reconstruir escenas tridimensionales a partir de fotografías o videos comunes, con alta fidelidad visual y en tiempo real (Kerbl et al., 2023). A diferencia de los métodos tradicionales de fotogrametría, 3DGS no requiere calibraciones complejas ni cámaras profesionales; puede funcionar con imágenes obtenidas por un teléfono móvil, lo que reduce significativamente los costos de adquisición y tiempo de procesamiento. Estudios recientes muestran su eficacia en ámbitos como reconstrucción arquitectónica, ingeniería civil y agricultura de precisión, con métricas de precisión superiores al 90\% en la detección de errores geométricos (Li et al., 2024).\par
+En este escenario emerge el potencial de las técnicas de reconstrucción 3D basadas en inteligencia artificial, particularmente el método conocido como 3D Gaussian Splatting (3DGS). Esta tecnología, derivada de los avances en neural rendering y Neural Radiance Fields (NeRF), permite reconstruir escenas tridimensionales a partir de fotografías o videos comunes, con alta fidelidad visual y en tiempo real \citep{kerbl2023}. A diferencia de los métodos tradicionales de fotogrametría, 3DGS no requiere calibraciones complejas ni cámaras profesionales; puede funcionar con imágenes obtenidas por un teléfono móvil, lo que reduce significativamente los costos de adquisición y tiempo de procesamiento. Estudios recientes muestran su eficacia en ámbitos como reconstrucción arquitectónica, ingeniería civil y agricultura de precisión, con métricas de precisión superiores al 90\% en la detección de errores geométricos (Li et al., 2024).\par
 
 Pese a sus ventajas, el principal desafío actual radica en interpretar automáticamente los modelos 3D generados para detectar deficiencias estructurales. En este punto, la incorporación de modelos de aprendizaje profundo (Deep Learning) permite analizar la geometría y textura de las superficies reconstruidas para predecir posibles errores en la distribución de cargas, fisuras o deformaciones estructurales. Estos modelos han demostrado su capacidad para reconocer patrones complejos a partir de datos espaciales tridimensionales, constituyéndose en una herramienta valiosa para la automatización de la inspección técnica (Zhang et al., 2024).\par
 
@@ -849,15 +849,11 @@ Como trabajo futuro se recomienda ampliar el prototipo hacia una aplicación mó
 
 Estas ampliaciones permitirían pasar de un MVP demostrativo a una plataforma de apoyo técnico más robusta, manteniendo la premisa central de la investigación: facilitar evaluaciones preliminares, trazables y accesibles sin sustituir la responsabilidad profesional del especialista estructural.\par
 
-\begin{thebibliography}{9}
-
-\bibitem{kerbl2023}
-Kerbl, B., Kopanas, G., Leimk{\"u}hler, T., y Drettakis, G. (2023). 3D Gaussian Splatting for Real-Time Radiance Field Rendering. \textit{ACM Transactions on Graphics}.
-
-\bibitem{mildenhall2020}
-Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., y Ng, R. (2020). NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. \textit{Communications of the ACM}.
-
-\end{thebibliography}
+% Se conservan las dos referencias existentes durante la migración a BibTeX.
+% Las demás citas manuales requieren verificar e incorporar su fuente completa.
+\nocite{kerbl2023,mildenhall2020}
+\bibliographystyle{apalike}
+\bibliography{referencias}
 
 \appendix
 
