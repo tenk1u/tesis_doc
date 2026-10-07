@@ -23,13 +23,32 @@ autores. Las URLs de verificación están en `referencias.bib`.
 
 ## Compilación
 
-Desde esta carpeta:
+### Opción 1: Con Tectonic (Recomendado, rápida y sin configuración manual)
+Ya se encuentra configurado en el entorno. Tienes varios métodos directos:
+1. **Automático en tiempo real (Modo vigilante):**
+   Haz doble clic en `vigilar.bat`. Se quedará abierto en una ventana y cada vez que guardes cambios en `main.tex` o `referencias.bib`, recompilará el PDF al instante.
+2. **Atajo en VS Code:**
+   Presiona `Ctrl + Shift + B` dentro de VS Code para compilar de inmediato.
+3. **Manual con un clic:**
+   Haciendo doble clic en `compilar.bat`.
+4. **Desde cualquier terminal:**
+   ```powershell
+   tectonic main.tex
+   ```
+   *Nota: Tectonic resuelve automáticamente las referencias BibTeX, índices y enlaces sin dejar archivos auxiliares innecesarios.*
 
+### Opción 2: Con MiKTeX / TeX Live tradicional
+Si tienes instalado MiKTeX o TeX Live:
 ```powershell
 pdflatex -interaction=nonstopmode -halt-on-error main.tex
 bibtex main
 pdflatex -interaction=nonstopmode -halt-on-error main.tex
 pdflatex -interaction=nonstopmode -halt-on-error main.tex
 ```
+O también:
+```powershell
+latexmk -pdf main.tex
+```
 
-También se puede usar `latexmk -pdf main.tex`. El PDF generado es `main.pdf`.
+El archivo PDF generado en todos los casos es `main.pdf`.
+
